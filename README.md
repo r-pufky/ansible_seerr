@@ -109,7 +109,7 @@ increasing deployment speed (useful for updating settings from configuration
 and adding users). Apply config only changes during a run:
 
 ```bash
-ansible-playbook site.yml --tags Jellyseerr -e 'jellyseerr_srv_force_config_only_enable=true'
+ansible-playbook site.yml --tags Jellyseerr -e '{"jellyseerr_srv_force_config_only_enable": true}'
 ```
 
 ## Development

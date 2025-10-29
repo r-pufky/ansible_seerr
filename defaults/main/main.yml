@@ -75,7 +75,7 @@ jellyseerr_srv_restart_daily_enable: true
 #
 #   ansible-playbook site.yml
 #       --tags Jellyseerr
-#       -e 'jellyseerr_srv_force_config_only_enable=true
+#       -e '{"jellyseerr_srv_force_config_only_enable": true}'
 #
 # Default: False.
 jellyseerr_srv_force_config_only_enable: false
