@@ -1,10 +1,8 @@
 ---
 ###############################################################################
-# Jellyseerr Role Options
+# Seerr Role Options
 ###############################################################################
-# TODO(role): Jellyseerr and Overseerr are currently merging together into a
-#     unified repository. Migrate to r_pufky.arr with 'seerr' role name, then
-#     update upstream repository (ansible_jellyseerr) as well as source repos.
+# Build from source.
 #
 # Updates:
 # * Branch for new Debian releases.
@@ -22,69 +20,69 @@
 # * Tag with OS-APP-ROLE version.
 #
 # Reference:
-# * https://jellyseerr.dev/
-# * https://docs.jellyseerr.dev/
+# * https://seerr.dev/
+# * https://docs.seerr.dev/
 # * https://github.com/seerr-team/seerr
 
-# Last time Jellyseerr options were validated against a default configuration.
-jellyseerr_role_validate_date: '2025-08-24'
-jellyseerr_role_validate_release: 'trixie'
-jellyseerr_role_validate_version: 'v2.7.3'
+# Last time Seerr options were validated against a default configuration.
+seerr_role_validate_date: '2025-08-24'
+seerr_role_validate_release: 'trixie'
+seerr_role_validate_version: 'v2.7.3'
 
-jellyseerr_role_poll_interval: 3
-jellyseerr_role_poll_timeout: 30
-jellyseerr_role_poll_msg: '{{
-    "(max " ~ jellyseerr_role_poll_timeout ~ "s)" ~
-    (30 - (jellyseerr_role_poll_timeout | lower | length)) * " "
+seerr_role_poll_interval: 3
+seerr_role_poll_timeout: 30
+seerr_role_poll_msg: '{{
+    "(max " ~ seerr_role_poll_timeout ~ "s)" ~
+    (30 - (seerr_role_poll_timeout | lower | length)) * " "
   }}'
 
 ###############################################################################
 # APT Packages
 ###############################################################################
 
-jellyseerr_role_packages:
+seerr_role_packages:
   - 'git'  # nvm/pnpm.
   - 'curl'  # nvm/pnpm.
   - 'sqlite3'  # sqlite3.
   - 'python3-psycopg2'  # community.postgresql_query.
 
 ###############################################################################
-# Jellyseerr GitHub Options
+# Seerr GitHub Options
 ###############################################################################
 # Only source code is released.
 #
 # Reference:
-# * https://github.com/fallenbagel/jellyseerr/tags
+# * https://github.com/seerr-team/seerr/tags
 
-jellyseerr_role_repo_release_owner: 'fallenbagel'
-jellyseerr_role_repo_release_repo: 'jellyseerr'
-jellyseerr_role_repo_release_asset: '{VERSION}.tar.gz'
-jellyseerr_role_repo_extract_dir: '/opt/jellyseerr'
-jellyseerr_role_repo_extract_symlink: '/opt/jellyseerr/jellyseerr'
-jellyseerr_role_repo_release_download_source_enable: true
+seerr_role_repo_release_owner: 'seerr-team'
+seerr_role_repo_release_repo: 'seerr'
+seerr_role_repo_release_asset: '{VERSION}.tar.gz'
+seerr_role_repo_extract_dir: '/opt/seerr'
+seerr_role_repo_extract_symlink: '/opt/seerr/seerr'
+seerr_role_repo_release_download_source_enable: true
 
 ###############################################################################
 # NVM Options
 ###############################################################################
 
-jellyseerr__nvm_version: 'v0.40.3'
-jellyseerr__nvm_nodejs_version: '22'
-jellyseerr__nvm_pnpm_version: '9'
-jellyseerr__nvm_url: '{{
+seerr__nvm_version: 'v0.40.3'
+seerr__nvm_nodejs_version: '22'
+seerr__nvm_pnpm_version: '9'
+seerr__nvm_url: '{{
     "https://raw.githubusercontent.com/nvm-sh/nvm/" ~
-    jellyseerr__nvm_version ~ "/install.sh"
+    seerr__nvm_version ~ "/install.sh"
   }}'
 
 ###############################################################################
 # Build Options
 ###############################################################################
 
-jellyseerr_role_etc_dir: '/etc/jellyseerr'
-jellyseerr_role_service_cfg: '/etc/jellyseerr/jellyseerr.conf'
-jellyseerr_role_opt_dir: '/opt/jellyseerr/jellyseerr'
-jellyseerr_role_config_dir: '/opt/jellyseerr/jellyseerr/config'
-jellyseerr_role_settings_cfg: '/opt/jellyseerr/jellyseerr/config/settings.json'
-jellyseerr_role_sqlite_db: '/opt/jellyseerr/jellyseerr/config/db/db.sqlite3'
+seerr_role_etc_dir: '/etc/seerr'
+seerr_role_service_cfg: '/etc/seerr/seerr.conf'
+seerr_role_opt_dir: '/opt/seerr/seerr'
+seerr_role_config_dir: '/opt/seerr/seerr/config'
+seerr_role_settings_cfg: '/opt/seerr/seerr/config/settings.json'
+seerr_role_sqlite_db: '/opt/seerr/seerr/config/db/db.sqlite3'
 
 ###############################################################################
 # API Options
@@ -93,22 +91,22 @@ jellyseerr_role_sqlite_db: '/opt/jellyseerr/jellyseerr/config/db/db.sqlite3'
 # Reference:
 # * http://localhost:5055/api-docs
 
-jellyseerr_role_api_base: 'http://localhost:5055/api/v1'
+seerr_role_api_base: 'http://localhost:5055/api/v1'
 
 ###############################################################################
-# Default Jellyseerr User/Group
+# Default Seerr User/Group
 ###############################################################################
 
-jellyseerr_role_group:
-  name: 'jellyseerr'
+seerr_role_group:
+  name: 'seerr'
   gid: 5560
 
-jellyseerr_role_user:
-  name: 'jellyseerr'
-  group: 'jellyseerr'
+seerr_role_user:
+  name: 'seerr'
+  group: 'seerr'
   uid: 5560
   shell: '/bin/bash'
-  home: '/opt/jellyseerr'
+  home: '/opt/seerr'
   create_home: true
   password: '!'
   password_lock: true
@@ -117,15 +115,15 @@ jellyseerr_role_user:
   system: true
 
 ###############################################################################
-# Default Jellyseerr db queries
+# Default Seerr db queries
 ###############################################################################
 # queries used to modify db for setup.
 
-jellyseerr_role_sqlite_user_insert: >
+seerr_role_sqlite_user_insert: >
   INSERT OR REPLACE INTO \"user\" (id, email, permissions, avatar, password,
   userType) VALUES
 
 # Case specific columns require double quotes.
-jellyseerr_role_pg_user_insert: >
+seerr_role_pg_user_insert: >
   INSERT INTO "user" (id, email, permissions, avatar, password, "userType")
   VALUES

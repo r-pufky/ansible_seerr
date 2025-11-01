@@ -6,17 +6,17 @@
 # any endpoint for specific notification events.
 #
 # Reference:
-# * https://docs.jellyseerr.dev/using-jellyseerr/notifications/webhooks
+# * https://docs.seerr.dev/using-seerr/notifications/webhooks
 
 # Enable notifications? Default: False.
-jellyseerr_cfg_agents_webhook_enabled: false
+seerr_cfg_agents_webhook_enabled: false
 
 # Webhook URL.
 #
-# jellyseerr_cfg_agents_webhook_json_payload will be the body of the request.
+# seerr_cfg_agents_webhook_json_payload will be the body of the request.
 #
 # Default: ''.
-jellyseerr_cfg_agents_webhook_webhook_url: ''
+seerr_cfg_agents_webhook_webhook_url: ''
 
 # Authorization header.
 #
@@ -24,18 +24,18 @@ jellyseerr_cfg_agents_webhook_webhook_url: ''
 # your webhook provider's documentation for details.
 #
 # Default: ''.
-jellyseerr_cfg_agents_webhook_auth_header: ''
+seerr_cfg_agents_webhook_auth_header: ''
 
 # JSON payload (base64 encoded).
 #
-# See reference documentation for creating a json payload in jellyseerr. MUST
+# See reference documentation for creating a json payload in seerr. MUST
 # BE BASE64 ENCODED!
 #
 # Default: 'Int9Ig==' ('{}' empty payload).
 #
 # Reference:
-# * https://docs.jellyseerr.dev/using-jellyseerr/notifications/webhooks
-jellyseerr_cfg_agents_webhook_json_payload: 'Int9Ig=='
+# * https://docs.seerr.dev/using-seerr/notifications/webhooks
+seerr_cfg_agents_webhook_json_payload: 'Int9Ig=='
 
 # Allowed notification types.
 #
@@ -58,7 +58,7 @@ jellyseerr_cfg_agents_webhook_json_payload: 'Int9Ig=='
 #   2048: Issue reopened (issues are reopened).
 #
 # Allow 'request pending approval', 'request declined', 'issue reported':
-# jellyseerr_cfg_agents_webhook_types: 322
+# seerr_cfg_agents_webhook_types: 322
 #
 # Default: 0.
-jellyseerr_cfg_agents_webhook_types: 0
+seerr_cfg_agents_webhook_types: 0

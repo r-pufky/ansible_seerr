@@ -1,6 +1,6 @@
 ---
 ###############################################################################
-# Jellyseerr Service Configuration
+# Seerr Service Configuration
 ###############################################################################
 # Existing databases are migrated automatically when new versions are
 # installed. Migration between database platforms is not supported and must be
@@ -9,13 +9,13 @@
 # Requires ~2GB Memory.
 #
 # Install size: ~3.4GB
-#          Jellyseerr: ~3GB.
+#               Seerr: ~3GB.
 #   nvm(pnpm, nodejs): ~300MB.
 #            Packages: ~48MB.
 #
 # Set repo_host_access_token if API is rate limited. See r_pufky.deb.repo.
 
-# Jellyseerr Release.
+# Seerr Release.
 #
 # Versions (Schematic):
 #       MAJOR: Unsafe - requires major role changes; only default MAJOR version
@@ -30,9 +30,9 @@
 #      latest: Use latest stable release.
 #
 # Default: 'v2.7.3'.
-jellyseerr_srv_version: 'v2.7.3'
+seerr_srv_version: 'v2.7.3'
 
-# Bind Jellyseerr service to specified interface.
+# Bind Seerr service to specified interface.
 #
 # Values:
 #          '': bind to all available interfaces (default).
@@ -40,16 +40,16 @@ jellyseerr_srv_version: 'v2.7.3'
 #   localhost: bind to localhost.
 #
 # Default: '' (all interfaces).
-jellyseerr_srv_bind_address: ''
+seerr_srv_bind_address: ''
 
 # HTTP port. Default: 5055.
-jellyseerr_srv_port: 5055
+seerr_srv_port: 5055
 
 # Remove old installs on upgrade success? Default: True.
-jellyseerr_srv_delete_old_versions_enable: true
+seerr_srv_delete_old_versions_enable: true
 
 # Service Umask. Default: '0002'.
-jellyseerr_srv_u_mask: '0002'
+seerr_srv_u_mask: '0002'
 
 # Force overwrite existing install?
 #
@@ -59,10 +59,10 @@ jellyseerr_srv_u_mask: '0002'
 # directories (if any). Any user data in these directories are DESTROYED.
 #
 # Default: False.
-jellyseerr_srv_force_overwrite: false
+seerr_srv_force_overwrite: false
 
-# Automatically restart Jellyseerr daily? Default: True.
-jellyseerr_srv_restart_daily_enable: true
+# Automatically restart Seerr daily? Default: True.
+seerr_srv_restart_daily_enable: true
 
 # Only apply configuration?
 #
@@ -74,61 +74,61 @@ jellyseerr_srv_restart_daily_enable: true
 # checking and installing a new version. Suggest applying with extra options:
 #
 #   ansible-playbook site.yml
-#       --tags Jellyseerr
-#       -e '{"jellyseerr_srv_force_config_only_enable": true}'
+#       --tags Seerr
+#       -e '{"seerr_srv_force_config_only_enable": true}'
 #
 # Default: False.
-jellyseerr_srv_force_config_only_enable: false
+seerr_srv_force_config_only_enable: false
 
-# Enable polling for jellyseerr_srv_port?
+# Enable polling for seerr_srv_port?
 #
-# Jellyseerr will report service is active and running but may not be ready to
+# Seerr will report service is active and running but may not be ready to
 # accept API requests for user modifications. Wait until the webserver is
 # responding before attempting API calls. Automatically proceeds after
 # forgejo_role_poll_timeout seconds.
 #
 # Default: True (poll).
-jellyseerr_srv_poll_enable: true
+seerr_srv_poll_enable: true
 
 ###############################################################################
-# Jellyseerr Service User
+# Seerr Service User
 ###############################################################################
 
-# User that Jellyseerr will run under.
+# User that Seerr will run under.
 #
-# Enable jellyseerr_srv_create_user if this account is not externally managed.
+# Enable seerr_srv_create_user if this account is not externally managed.
 #
 # Must use BASH for build environment. nvm packages cached in home directory.
 #
-# Default: 'jellyseerr'.
-jellyseerr_srv_user: 'jellyseerr'
+# Default: 'seerr'.
+seerr_srv_user: 'seerr'
 
-# Group that Jellyseerr will run under.
+# Group that Seerr will run under.
 #
-# Enable jellyseerr_srv_create_user if this group is not externally managed.
+# Enable seerr_srv_create_user if this group is not externally managed.
 #
-# Default: 'jellyseerr'.
-jellyseerr_srv_group: 'jellyseerr'
+# Default: 'seerr'.
+seerr_srv_group: 'seerr'
 
-# Create jellyseerr_srv_user, jellyseerr_srv_group if not detected?
+# Create seerr_srv_user, seerr_srv_group if not detected?
 #
 # Applied via r_pufky.deb.users, see vars/main.yml for default user attributes.
 #
 # Default: True.
-jellyseerr_srv_create_user: true
+seerr_srv_create_user: true
 
 # Enable user management of data/media files?
 #
-# Use jellyseerr_srv_user to execute data/media management commands. Role
+# Use seerr_srv_user to execute data/media management commands. Role
 # applies media permissions using 'root' by default. For mounted data locations
 # (NFS with squashed mounts, mapped container mounts, etc) the local root user
 # will not have sufficient privileges to modify these files.
 #
 # Applies to:
-# * /opt/jellyseerr
+# * /opt/seerr
 #
 # Default: False.
-jellyseerr_srv_user_data_manage_enable: false
+seerr_srv_user_data_manage_enable: false
 
 ###############################################################################
 # Build Options
@@ -145,7 +145,7 @@ jellyseerr_srv_user_data_manage_enable: false
 #   -1: Autodetect memory ceiling (default).
 #
 # Default: -1 (autodetect).
-jellyseerr_srv_build_memory: -1
+seerr_srv_build_memory: -1
 
 # Clean PNPM cache after build?
 #
@@ -154,23 +154,23 @@ jellyseerr_srv_build_memory: -1
 # between versions.
 #
 # Default: True.
-jellyseerr_srv_build_clear_cache: true
+seerr_srv_build_clear_cache: true
 
 ###############################################################################
-# Jellyseerr Owner
+# Seerr Owner
 ###############################################################################
-# Jellyseerr owner provides initial login, configuration, and REST API use.
+# Seerr owner provides initial login, configuration, and REST API use.
 #
 # Additional owner options and users may be configured after service started.
 
-# Owner email. Default: 'jellyseerr@example.com'.
-jellyseerr_srv_owner_email: 'jellyseerr@example.com'
+# Owner email. Default: 'seerr@example.com'.
+seerr_srv_owner_email: 'seerr@example.com'
 
-# Owner username. Default: 'jellyseerr'.
-jellyseerr_srv_owner_username: 'jellyseerr'
+# Owner username. Default: 'seerr'.
+seerr_srv_owner_username: 'seerr'
 
 # Owner password. Default: '{RANDOM}' (randomly generated).
-jellyseerr_srv_owner_password: '{{
+seerr_srv_owner_password: '{{
     lookup("ansible.builtin.password",
            "/dev/null",
            chars=["ascii_lowercase", "ascii_uppercase", "digits"],
@@ -179,10 +179,10 @@ jellyseerr_srv_owner_password: '{{
 
 # Owner avatar.
 #
-# Avatar URL for profile picture. Use image link from Plex/Jellyseerr profile.
+# Avatar URL for profile picture. Use image link from Plex/Seerr profile.
 #
 # Default: (empty silhouette).
-jellyseerr_srv_owner_avatar: '{{
+seerr_srv_owner_avatar: '{{
     "https://gravatar.com/avatar/" ~
     "c77fdc27cab83732b8623d2ea873d330?default=mm&size=200"
   }}'

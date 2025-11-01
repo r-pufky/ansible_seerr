@@ -1,51 +1,50 @@
 ---
-# yamllint disable rule:line-length
 ###############################################################################
-# Jellyseerr YARN Configuration
+# Seerr YARN Configuration
 ###############################################################################
 # Limit V8 object cache to system memory size and disable source maps. If
 # javascript heap out of memory error continually occurs increase the minimum
 # memory requirement for the role.
 #
 # Reference:
-# * https://docs.jellyseerr.dev/getting-started/buildfromsource
+# * https://docs.seerr.dev/getting-started/buildfromsource
 
-- name: 'Build | Jellyseerr from source 🗘'
+- name: 'Build | Seerr from source 🗘'
   ansible.builtin.debug:
     msg: |
       ╭───────────────────────────────────────────────────────────────────╮
       │                                                                   │
-      │  Building Jellyseerr from source. This will take a few minutes.   │
+      │     Building Seerr from source. This will take a few minutes.     │
       │                                                                   │
       ╰───────────────────────────────────────────────────────────────────╯
 
-- name: 'Build | compile {{ _jellyseerr_srv_version.raw }}'
+- name: 'Build | compile {{ _seerr_srv_version.raw }}'
   ansible.builtin.shell: >
-    source {{ _jellyseerr.nvm_env }} &&
-    corepack use pnpm@latest-{{ jellyseerr__nvm_pnpm_version }} &&
+    source {{ _seerr.nvm_env }} &&
+    corepack use pnpm@latest-{{ seerr__nvm_pnpm_version }} &&
     pnpm build
   args:
     executable: '/bin/bash'
-    chdir: '{{ jellyseerr_role_opt_dir }}'
+    chdir: '{{ seerr_role_opt_dir }}'
   environment:
     NODE_OPTIONS: '{{
-        _jellyseerr_srv_build_memory._args ~
-        _jellyseerr_srv_build_memory.data
+        _seerr_srv_build_memory._args ~
+        _seerr_srv_build_memory.data
       }}'
     GENERATE_SOURCEMAP: 'false'
   changed_when: false
   become: true
-  become_user: '{{ _jellyseerr_srv_user.raw }}'
+  become_user: '{{ _seerr_srv_user.raw }}'
 
 - name: 'Build | clear cache'
-  when: _jellyseerr_srv_build_clear_cache.raw
+  when: _seerr_srv_build_clear_cache.raw
   ansible.builtin.shell: >
-    source {{ _jellyseerr.nvm_env }} &&
-    corepack use pnpm@latest-{{ jellyseerr__nvm_pnpm_version }} &&
+    source {{ _seerr.nvm_env }} &&
+    corepack use pnpm@latest-{{ seerr__nvm_pnpm_version }} &&
     pnpm store prune
   args:
     executable: '/bin/bash'
-    chdir: '{{ jellyseerr_role_opt_dir }}'
+    chdir: '{{ seerr_role_opt_dir }}'
   changed_when: false
   become: true
-  become_user: '{{ _jellyseerr_srv_user.raw }}'
+  become_user: '{{ _seerr_srv_user.raw }}'

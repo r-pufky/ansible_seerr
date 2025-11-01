@@ -3,10 +3,10 @@
 # Settings > Notifications > Discord (settings.json > discord)
 ###############################################################################
 # Reference:
-# * https://docs.jellyseerr.dev/using-jellyseerr/notifications/discord
+# * https://docs.seerr.dev/using-seerr/notifications/discord
 
 # Enable notifications? Default: False.
-jellyseerr_cfg_agents_discord_enabled: false
+seerr_cfg_agents_discord_enabled: false
 
 # Webhook URL. Default: ''.
 #
@@ -14,19 +14,19 @@ jellyseerr_cfg_agents_discord_enabled: false
 #
 # Reference:
 # * https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks
-jellyseerr_cfg_agents_discord_webhook_url: ''
+seerr_cfg_agents_discord_webhook_url: ''
 
 # Bot username. Default: ''.
-jellyseerr_cfg_agents_discord_bot_username: ''
+seerr_cfg_agents_discord_bot_username: ''
 
 # Bot avatar URL. Default: ''.
-jellyseerr_cfg_agents_discord_bot_avatar_url: ''
+seerr_cfg_agents_discord_bot_avatar_url: ''
 
 # Webhook notification role ID. Default: ''.
-jellyseerr_cfg_agents_discord_webhook_role_id: ''
+seerr_cfg_agents_discord_webhook_role_id: ''
 
 # Enable user mentions in discord? Default: True.
-jellyseerr_cfg_agents_discord_enable_mentions: true
+seerr_cfg_agents_discord_enable_mentions: true
 
 # Allowed notification types.
 #
@@ -49,7 +49,7 @@ jellyseerr_cfg_agents_discord_enable_mentions: true
 #   2048: Issue reopened (issues are reopened).
 #
 # Allow 'request pending approval', 'request declined', 'issue reported':
-#   jellyseerr_cfg_agents_discord_types: 322
+#   seerr_cfg_agents_discord_types: 322
 #
 # Default: 0.
-jellyseerr_cfg_agents_discord_types: 0
+seerr_cfg_agents_discord_types: 0

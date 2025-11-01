@@ -1,39 +1,39 @@
 {# TODO(role): Migrate to dynamic Data annotations v2. #}
 {
- "clientId": "{{ _jellyseerr_cfg_client_id.raw }}",
- "vapidPrivate": "{{ _jellyseerr_cfg_vapid_private.raw }}",
- "vapidPublic": "{{ _jellyseerr_cfg_vapid_public.raw }}",
+ "clientId": "{{ _seerr_cfg_client_id.raw }}",
+ "vapidPrivate": "{{ _seerr_cfg_vapid_private.raw }}",
+ "vapidPublic": "{{ _seerr_cfg_vapid_public.raw }}",
  "main": {
-  "apiKey": "{{ _jellyseerr_cfg_api_key.raw }}",
-  "applicationTitle": "{{ _jellyseerr_cfg_application_title.raw }}",
-  "applicationUrl": "{{ _jellyseerr_cfg_application_url.raw }}",
-  "cacheImages": {{ _jellyseerr_cfg_cache_images.raw | lower }},
-  "defaultPermissions": {{ _jellyseerr_cfg_default_permissions.raw }},
+  "apiKey": "{{ _seerr_cfg_api_key.raw }}",
+  "applicationTitle": "{{ _seerr_cfg_application_title.raw }}",
+  "applicationUrl": "{{ _seerr_cfg_application_url.raw }}",
+  "cacheImages": {{ _seerr_cfg_cache_images.raw | lower }},
+  "defaultPermissions": {{ _seerr_cfg_default_permissions.raw }},
   "defaultQuotas": {
    "movie": {
-    "quotaLimit": {{ _jellyseerr_cfg_default_quotas_movie_quota_limit.raw }},
-    "quotaDays": {{ _jellyseerr_cfg_default_quotas_movie_quota_days.raw }}
+    "quotaLimit": {{ _seerr_cfg_default_quotas_movie_quota_limit.raw }},
+    "quotaDays": {{ _seerr_cfg_default_quotas_movie_quota_days.raw }}
    },
    "tv": {
-    "quotaLimit": {{ _jellyseerr_cfg_default_quotas_tv_quota_limit.raw }},
-    "quotaDays": {{ _jellyseerr_cfg_default_quotas_tv_quota_days.raw }}
+    "quotaLimit": {{ _seerr_cfg_default_quotas_tv_quota_limit.raw }},
+    "quotaDays": {{ _seerr_cfg_default_quotas_tv_quota_days.raw }}
    }
   },
-  "hideAvailable": {{ _jellyseerr_cfg_hide_available.raw | lower }},
-  "hideBlacklisted": {{ _jellyseerr_cfg_hide_blacklisted.raw | lower }},
-  "localLogin": {{ _jellyseerr_cfg_local_login.raw | lower }},
-  "mediaServerLogin": {{ _jellyseerr_cfg_media_server_login.raw | lower }},
-  "newPlexLogin": {{ _jellyseerr_cfg_new_plex_login.raw | lower }},
-  "discoverRegion": "{{ _jellyseerr_cfg_discover_region.raw }}",
-  "streamingRegion": "{{ _jellyseerr_cfg_streaming_region.raw }}",
-  "originalLanguage": "{{ _jellyseerr_cfg_original_language.data }}",
-  "blacklistedTags": "{{ _jellyseerr_cfg_blacklisted_tags.data }}",
-  "blacklistedTagsLimit": {{ _jellyseerr_cfg_blacklisted_tags_limit.raw }},
-  "mediaServerType": {{ _jellyseerr_cfg_media_server_type.raw }},
-  "partialRequestsEnabled": {{ _jellyseerr_cfg_partial_requests_enabled.raw | lower }},
-  "enableSpecialEpisodes": {{ _jellyseerr_cfg_enable_special_episodes.raw | lower }},
-  "locale": "{{ _jellyseerr_cfg_locale.raw }}",
-  "youtubeUrl": "{{ _jellyseerr_cfg_youtube_url.raw }}"
+  "hideAvailable": {{ _seerr_cfg_hide_available.raw | lower }},
+  "hideBlacklisted": {{ _seerr_cfg_hide_blacklisted.raw | lower }},
+  "localLogin": {{ _seerr_cfg_local_login.raw | lower }},
+  "mediaServerLogin": {{ _seerr_cfg_media_server_login.raw | lower }},
+  "newPlexLogin": {{ _seerr_cfg_new_plex_login.raw | lower }},
+  "discoverRegion": "{{ _seerr_cfg_discover_region.raw }}",
+  "streamingRegion": "{{ _seerr_cfg_streaming_region.raw }}",
+  "originalLanguage": "{{ _seerr_cfg_original_language.data }}",
+  "blacklistedTags": "{{ _seerr_cfg_blacklisted_tags.data }}",
+  "blacklistedTagsLimit": {{ _seerr_cfg_blacklisted_tags_limit.raw }},
+  "mediaServerType": {{ _seerr_cfg_media_server_type.raw }},
+  "partialRequestsEnabled": {{ _seerr_cfg_partial_requests_enabled.raw | lower }},
+  "enableSpecialEpisodes": {{ _seerr_cfg_enable_special_episodes.raw | lower }},
+  "locale": "{{ _seerr_cfg_locale.raw }}",
+  "youtubeUrl": "{{ _seerr_cfg_youtube_url.raw }}"
  },
 {% include 'servers/plex.json.j2' with context +%}
 {% include 'servers/jellyfin.json.j2' with context +%}
@@ -41,7 +41,7 @@
 {% include 'servers/radarr.json.j2' with context +%}
 {% include 'servers/sonarr.json.j2' with context +%}
  "public": {
-  "initialized": {{ _jellyseerr_cfg_public_initialized.raw | lower }}
+  "initialized": {{ _seerr_cfg_public_initialized.raw | lower }}
  },
  "notifications": {
   "agents": {
@@ -59,58 +59,58 @@
  },
  "jobs": {
   "plex-recently-added-scan": {
-   "schedule": "{{ _jellyseerr_cfg_jobs_plex_recently_added_scan.raw }}"
+   "schedule": "{{ _seerr_cfg_jobs_plex_recently_added_scan.raw }}"
   },
   "plex-full-scan": {
-   "schedule": "{{ _jellyseerr_cfg_jobs_plex_full_scan.raw }}"
+   "schedule": "{{ _seerr_cfg_jobs_plex_full_scan.raw }}"
   },
   "plex-watchlist-sync": {
-   "schedule": "{{ _jellyseerr_cfg_jobs_plex_watchlist_sync.raw }}"
+   "schedule": "{{ _seerr_cfg_jobs_plex_watchlist_sync.raw }}"
   },
   "plex-refresh-token": {
-   "schedule": "{{ _jellyseerr_cfg_jobs_plex_refresh_token.raw }}"
+   "schedule": "{{ _seerr_cfg_jobs_plex_refresh_token.raw }}"
   },
   "radarr-scan": {
-   "schedule": "{{ _jellyseerr_cfg_jobs_radarr_scan.raw }}"
+   "schedule": "{{ _seerr_cfg_jobs_radarr_scan.raw }}"
   },
   "sonarr-scan": {
-   "schedule": "{{ _jellyseerr_cfg_jobs_sonarr_scan.raw }}"
+   "schedule": "{{ _seerr_cfg_jobs_sonarr_scan.raw }}"
   },
   "availability-sync": {
-   "schedule": "{{ _jellyseerr_cfg_jobs_availability_sync.raw }}"
+   "schedule": "{{ _seerr_cfg_jobs_availability_sync.raw }}"
   },
   "download-sync": {
-   "schedule": "{{ _jellyseerr_cfg_jobs_download_sync.raw }}"
+   "schedule": "{{ _seerr_cfg_jobs_download_sync.raw }}"
   },
   "download-sync-reset": {
-   "schedule": "{{ _jellyseerr_cfg_jobs_download_sync_reset.raw }}"
+   "schedule": "{{ _seerr_cfg_jobs_download_sync_reset.raw }}"
   },
   "jellyfin-recently-added-scan": {
-   "schedule": "{{ _jellyseerr_cfg_jobs_jellyfin_recently_added_scan.raw }}"
+   "schedule": "{{ _seerr_cfg_jobs_jellyfin_recently_added_scan.raw }}"
   },
   "jellyfin-full-scan": {
-   "schedule": "{{ _jellyseerr_cfg_jobs_jellyfin_full_scan.raw }}"
+   "schedule": "{{ _seerr_cfg_jobs_jellyfin_full_scan.raw }}"
   },
   "image-cache-cleanup": {
-   "schedule": "{{ _jellyseerr_cfg_jobs_image_cache_cleanup.raw }}"
+   "schedule": "{{ _seerr_cfg_jobs_image_cache_cleanup.raw }}"
   },
   "process-blacklisted-tags": {
-   "schedule": "{{ _jellyseerr_cfg_jobs_process_blacklisted_tags.raw }}"
+   "schedule": "{{ _seerr_cfg_jobs_process_blacklisted_tags.raw }}"
   }
  },
  "network": {
-  "csrfProtection": {{ _jellyseerr_cfg_csrf_protection.raw | lower }},
-  "forceIpv4First": {{ _jellyseerr_cfg_force_ipv4_first.raw | lower }},
-  "trustProxy": {{ _jellyseerr_cfg_trust_proxy.raw | lower }},
+  "csrfProtection": {{ _seerr_cfg_csrf_protection.raw | lower }},
+  "forceIpv4First": {{ _seerr_cfg_force_ipv4_first.raw | lower }},
+  "trustProxy": {{ _seerr_cfg_trust_proxy.raw | lower }},
   "proxy": {
-   "enabled": {{ _jellyseerr_cfg_proxy_enabled.raw | lower }},
-   "hostname": "{{ _jellyseerr_cfg_proxy_hostname.raw }}",
-   "port": {{ _jellyseerr_cfg_proxy_port.raw }},
-   "useSsl": {{ _jellyseerr_cfg_proxy_use_ssl.raw | lower }},
-   "user": "{{ _jellyseerr_cfg_proxy_user.raw }}",
-   "password": "{{ _jellyseerr_cfg_proxy_password.raw }}",
-   "bypassFilter": "{{ _jellyseerr_cfg_proxy_bypass_filter.data }}",
-   "bypassLocalAddresses": {{ _jellyseerr_cfg_proxy_bypass_local_addresses.raw | lower }}
+   "enabled": {{ _seerr_cfg_proxy_enabled.raw | lower }},
+   "hostname": "{{ _seerr_cfg_proxy_hostname.raw }}",
+   "port": {{ _seerr_cfg_proxy_port.raw }},
+   "useSsl": {{ _seerr_cfg_proxy_use_ssl.raw | lower }},
+   "user": "{{ _seerr_cfg_proxy_user.raw }}",
+   "password": "{{ _seerr_cfg_proxy_password.raw }}",
+   "bypassFilter": "{{ _seerr_cfg_proxy_bypass_filter.data }}",
+   "bypassLocalAddresses": {{ _seerr_cfg_proxy_bypass_local_addresses.raw | lower }}
   }
  }
 }

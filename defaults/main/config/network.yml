@@ -8,61 +8,61 @@
 # Experimental features may be deprecated in future releases.
 #
 # Reference:
-# * https://docs.jellyseerr.dev/category/settings
+# * https://docs.seerr.dev/category/settings
 
 # Enable proxy support?
 #
-# If you have Jellyseerr behind a reverse proxy, enable this setting to allow
-# Jellyseerr to correctly register client IP addresses.
+# If you have Seerr behind a reverse proxy, enable this setting to allow
+# Seerr to correctly register client IP addresses.
 #
 # Default: False.
-jellyseerr_cfg_trust_proxy: false
+seerr_cfg_trust_proxy: false
 
 # Enable CSRF protection?
 #
 # CSRF stands for cross-site request forgery. When this setting is enabled, all
-# external API access that alters Jellyseerr application data is blocked (sets
+# external API access that alters Seerr application data is blocked (sets
 # external API access to read-only (requires HTTPS)).
 #
-# If you do not use Jellyseerr integrations with third-party applications to
+# If you do not use Seerr integrations with third-party applications to
 # add/modify/delete requests or users, you can consider enabling this setting
 # to protect against malicious attacks.
 #
 # HTTPS is required to use this, meaning that once this setting is enabled you
-# will no longer be able to access your Jellyseerr instance over HTTP (including
+# will no longer be able to access your Seerr instance over HTTP (including
 # using an IP address and port number).
 #
 # Default: False.
-jellyseerr_cfg_csrf_protection: false
+seerr_cfg_csrf_protection: false
 
 # Force IPv4 resolution before IPv6?
 #
 # Experimental (may be removed in future versions).
 #
 # Default: False.
-jellyseerr_cfg_force_ipv4_first: false
+seerr_cfg_force_ipv4_first: false
 
 # Enable HTTPS Proxy?
 #
 # Enables advanced proxy configuration. Disabling will disable advanced proxy.
 #
 # Default: False.
-jellyseerr_cfg_proxy_enabled: false
+seerr_cfg_proxy_enabled: false
 
 # HTTPS Proxy hostname. Default: ''.
-jellyseerr_cfg_proxy_hostname: ''
+seerr_cfg_proxy_hostname: ''
 
 # HTTPS Proxy port. Default: 8080.
-jellyseerr_cfg_proxy_port: 8080
+seerr_cfg_proxy_port: 8080
 
 # HTTPS Proxy Use SSL? Default: False.
-jellyseerr_cfg_proxy_use_ssl: false
+seerr_cfg_proxy_use_ssl: false
 
 # HTTPS Proxy username. Default: ''.
-jellyseerr_cfg_proxy_user: ''
+seerr_cfg_proxy_user: ''
 
 # HTTPS Proxy password. Default: False.
-jellyseerr_cfg_proxy_password: ''
+seerr_cfg_proxy_password: ''
 
 # HTTPS Proxy ignored addresses.
 #
@@ -70,7 +70,7 @@ jellyseerr_cfg_proxy_password: ''
 #   *.: Wildcard for subdomains.
 #
 # Default: [].
-jellyseerr_cfg_proxy_bypass_filter: []
+seerr_cfg_proxy_bypass_filter: []
 
 # HTTPS Proxy bypass for local addresses? Default: False.
-jellyseerr_cfg_proxy_bypass_local_addresses: true
+seerr_cfg_proxy_bypass_local_addresses: true

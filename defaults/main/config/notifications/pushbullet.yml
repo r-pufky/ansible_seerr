@@ -8,10 +8,10 @@
 # notification types are dependent on user permissions.
 #
 # Reference:
-# * https://docs.jellyseerr.dev/using-jellyseerr/notifications/pushbullet
+# * https://docs.seerr.dev/using-seerr/notifications/pushbullet
 
 # Enable notifications? Default: False.
-jellyseerr_cfg_agents_pushbullet_enabled: false
+seerr_cfg_agents_pushbullet_enabled: false
 
 # Access token.
 #
@@ -19,10 +19,10 @@ jellyseerr_cfg_agents_pushbullet_enabled: false
 #
 # Reference:
 # * https://www.pushbullet.com/#settings/account
-jellyseerr_cfg_agents_pushbullet_access_token: ''
+seerr_cfg_agents_pushbullet_access_token: ''
 
 # Channel tag. Default: ''.
-jellyseerr_cfg_agents_pushbullet_channel_tag: ''
+seerr_cfg_agents_pushbullet_channel_tag: ''
 
 # Allowed notification types.
 #
@@ -45,7 +45,7 @@ jellyseerr_cfg_agents_pushbullet_channel_tag: ''
 #   2048: Issue reopened (issues are reopened).
 #
 # Allow 'request pending approval', 'request declined', 'issue reported':
-# jellyseerr_cfg_agents_pushbullet_types: 322
+# seerr_cfg_agents_pushbullet_types: 322
 #
 # Default: 0.
-jellyseerr_cfg_agents_pushbullet_types: 0
+seerr_cfg_agents_pushbullet_types: 0

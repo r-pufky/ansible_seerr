@@ -1,73 +1,62 @@
-# Jellyseerr
-Jellyseerr install from public release tarball.
+# Seerr
+Seerr install from public release tarball.
 
 ## Requirements
-[supported platforms](https://github.com/r-pufky/ansible_jellyseerr/blob/main/meta/main.yml)
+[supported platforms](https://github.com/r-pufky/ansible_seerr/blob/main/meta/main.yml)
 
 ## Role Variables
-[defaults](https://github.com/r-pufky/ansible_jellyseerr/tree/main/defaults/main)
+[defaults](https://github.com/r-pufky/ansible_seerr/tree/main/defaults/main)
 
 ### Ports
 All ports and protocols have been defined for the role.
 
-[defaults/ports.yml](https://github.com/r-pufky/ansible_jellyseerr/blob/main/defaults/main/ports.yml)
+[defaults/ports.yml](https://github.com/r-pufky/ansible_seerr/blob/main/defaults/main/ports.yml)
 
 ## Dependencies
 **galaxy-ng** roles cannot be used independently. Part of
-[r_pufky.srv](https://github.com/r-pufky/ansible_collection_srv) collection.
+[r_pufky.arr](https://github.com/r-pufky/ansible_collection_arr) collection.
 
 ## Example Playbook
 **STOP.**
 
 WARNING
-> Jellyseerr & Overseerr are now officially merging together.
+> Migrations from previous Jellyseerr/Overseerr versions in practice require
+> manual intervention.
 >
-> Upstream repositories **will** change: https://github.com/seerr-team/seerr
-> Role repository migration to: https://github.com/r-pufky/seerr
-> Action Required:
-> Role name WILL change to r_pufky.arr.seerr during collection
-> migration. Be sure to update the collection and role.
-
-WARNING
-> Migrations from Overseerr in practice require manual intervention.
->
-> ALWAYS backup databases and data (or make a snapshot) before
-> attempting a migration.
+> ALWAYS backup databases and data (or make a snapshot) before attempting a
+> migration.
 >
 > Suggest creating a new container and removing the old instance one confirmed
 > working.
 >
-> [migration instructions](docs.jellyseerr.dev).
+> [migration instructions](docs.seerr.dev).
 
 Read defaults documentation.
 
-Overseerr migrations should be done **manually**: Overseerr versions > `1.33.2`
-may not be migratable.
-
-Install 2.7.3 release of Jellyseerr; Use Plex as a media server and ensure
+Install 2.7.3 release of Seerr; Use Plex as a media server and ensure
 media files have proper permissions. Version (and databases) will be migrated
 and updated on new releases. Configure both Sonarr and Radarr services.
 
 ``` yaml
-- name: 'Jellyseerr server'
-  hosts: 'jellyseerr.example.com'
+- name: 'Seerr server'
+  hosts: 'seerr.example.com'
   become: true
   roles:
-     - 'r_pufky.srv.jellyseerr'
+     - 'r_pufky.arr.seerr'
   vars:
-    forgejo_srv_version: 'v2.7.3'
-    jellyseerr_srv_owner_email: 'jellyseerr@example.com'
-    jellyseerr_srv_owner_username: 'jellyseerr'
-    jellyseerr_srv_owner_password: '{PASSWORD}'
-    jellyseerr_srv_owner_avatar: 'https://plex.tv/users/1234567890abdcef/avatar?c=1234567890'
-    jellyseerr_cfg_plex_name: ''  # See defaults, Plex/Jellyfin supported.
-    jellyseerr_cfg_plex_ip: ''
-    jellyseerr_cfg_plex_port: 32400
-    jellyseerr_cfg_plex_use_ssl: false
-    jellyseerr_cfg_plex_machine_id: '{PLEX PROCESSED MACHINE ID}'
-    jellyseerr_cfg_client_id: '{{ vault_jellyseerr_client_id }}'
-    jellyseerr_cfg_api_key: '{{ vault_jellyseerr_api_key }}'
-    jellyseerr_plex_radarr:
+    seerr_srv_version: 'v2.7.3'
+    seerr_srv_owner_email: 'seerr@example.com'
+    seerr_srv_owner_username: 'seerr'
+    seerr_srv_owner_password: '{PASSWORD}'
+    seerr_srv_owner_avatar: 'https://plex.tv/users/1234567890abdcef/avatar?c=1234567890'
+    seerr_cfg_plex_name: ''  # See defaults, Plex/Jellyfin supported.
+    seerr_cfg_plex_ip: ''
+    seerr_cfg_plex_port: 32400
+    seerr_cfg_plex_use_ssl: false
+    seerr_cfg_plex_machine_id: '{PLEX PROCESSED MACHINE ID}'
+    seerr_cfg_client_id: '{{ vault_seerr_client_id }}'
+    seerr_cfg_api_key: '{{ vault_seerr_api_key }}'
+    seerr_plex_radarr:
       - name: 'radarr'
         hostname: '127.0.0.1'
         port: 7878
@@ -86,7 +75,7 @@ and updated on new releases. Configure both Sonarr and Radarr services.
         prevent_search: true
         tag_requests: false
         id: 0
-    jellyseerr_plex_sonarr:
+    seerr_plex_sonarr:
       - name: 'sonarr'
         hostname: '127.0.0.1'
         port: 8989
@@ -113,12 +102,13 @@ and updated on new releases. Configure both Sonarr and Radarr services.
         id: 0
 ```
 
-The Jellyseerr role can deploy config only changes after the first run, greatly
+The Seerr role can deploy config only changes after the first run, greatly
 increasing deployment speed (useful for updating settings from configuration
 and adding users). Apply config only changes during a run:
 
 ```bash
-ansible-playbook site.yml --tags Jellyseerr -e '{"jellyseerr_srv_force_config_only_enable": true}'
+ansible-playbook site.yml --tags Seerr \
+  -e '{"seerr_srv_force_config_only_enable": true}'
 ```
 
 ## Development
@@ -135,16 +125,16 @@ Release format: **{OS}-{SERVICE}-{ROLE}**
 Each type inherits the versioning system used; defaulting to schematic
 versioning.
 
-`12.0.0-2.0.3-1.0.0`
+`12-2.0.3-1.0.0`
 
-* 12.0.0 - Debian 12 (bookworm).
+* 12 - Debian 12 (bookworm).
 * 2.0.3 - Service/app version.
 * 1.0.0 - Role version.
 
 Releases are branched on Debian releases:
 
-* **[13.x.x](https://github.com/r-pufky/ansible_jellyseerr)**: 13 Trixie.
-* **[12.x.x](https://github.com/r-pufky/ansible_jellyseerr/tree/12.x)**: 12 Bookworm.
+* **[13.x.x](https://github.com/r-pufky/ansible_seerr)**: 13 Trixie.
+* **[12.x.x](https://github.com/r-pufky/ansible_seerr/tree/12.x)**: 12 Bookworm.
 
 ### Issues
 Create a bug and provide as much information as possible.
@@ -153,7 +143,7 @@ Associate pull requests with a submitted bug.
 
 ## License
 [AGPL-3.0 License](https://www.tldrlegal.com/license/gnu-affero-general-public-license-v3-agpl-3-0)
- [(direct link)](https://github.com/r-pufky/ansible_jellyseerr/blob/main/LICENSE)
+ [(direct link)](https://github.com/r-pufky/ansible_seerr/blob/main/LICENSE)
 
 ## Author Information
 PGP Fingerprint: [466EEC2B67516C7117C85CE3A0BC35D16698BAB9](https://keys.openpgp.org/vks/v1/by-fingerprint/466EEC2B67516C7117C85CE3A0BC35D16698BAB9)

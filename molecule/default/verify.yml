@@ -3,15 +3,15 @@
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'Verify | jellyseerr.conf'
+    - name: 'Verify | seerr.conf'
       ansible.builtin.include_role:
         name: 'r_pufky.lib.tests'
         tasks_from: 'copy.yml'
       vars:
-        test_name: 'Verify | jellyseerr.conf'
-        test_src: 'files/jellyseerr.conf'
-        test_file: '/etc/jellyseerr/jellyseerr.conf'
-        test_owner: 'jellyseerr'
-        test_group: 'jellyseerr'
+        test_name: 'Verify | seerr.conf'
+        test_src: 'files/seerr.conf'
+        test_file: '/etc/seerr/seerr.conf'
+        test_owner: 'seerr'
+        test_group: 'seerr'
         test_mode: '0640'
         test_diff: true

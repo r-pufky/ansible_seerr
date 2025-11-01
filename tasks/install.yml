@@ -1,7 +1,6 @@
 ---
-# yamllint disable rule:line-length
 ###############################################################################
-# Jellyseerr Install
+# Seerr Install
 ###############################################################################
 # Install specified version from github release.
 #
@@ -20,32 +19,31 @@
 # Rant over.
 #
 # Reference:
-# * https://docs.jellyseerr.dev/getting-started/buildfromsource
-# yamllint enable rule:line-length
+# * https://docs.seerr.dev/getting-started/buildfromsource
 
 - name: 'Install | create build directories'
   ansible.builtin.file:
     path: '{{ item }}'
-    owner: '{{ _jellyseerr_srv_user._uid }}'
-    group: '{{ _jellyseerr_srv_group._gid }}'
+    owner: '{{ _seerr_srv_user._uid }}'
+    group: '{{ _seerr_srv_group._gid }}'
     mode: '0755'
     state: 'directory'
   become: true
   become_user: '{{
-      _jellyseerr_srv_user.raw
-      if _jellyseerr_srv_user_data_manage_enable.raw else
+      _seerr_srv_user.raw
+      if _seerr_srv_user_data_manage_enable.raw else
       "root"
     }}'
   loop:
-    - '{{ _jellyseerr.nvm_dir }}'
-    - '{{ _jellyseerr.nvm_cache }}'
+    - '{{ _seerr.nvm_dir }}'
+    - '{{ _seerr.nvm_cache }}'
 
 - name: 'Install | set nvm environment'
   ansible.builtin.template:
     src: 'nvm.env.j2'
-    dest: '{{ _jellyseerr.nvm_env }}'
-    owner: '{{ _jellyseerr_srv_user._uid }}'
-    group: '{{ _jellyseerr_srv_group._gid }}'
+    dest: '{{ _seerr.nvm_env }}'
+    owner: '{{ _seerr_srv_user._uid }}'
+    group: '{{ _seerr_srv_group._gid }}'
     mode: '0644'
 
 - name: 'Install | packages'
@@ -53,67 +51,67 @@
     name: 'r_pufky.deb.apt'
   vars:
     apt_packages:
-      - '{{ jellyseerr_role_packages }}'
+      - '{{ seerr_role_packages }}'
     apt_package_update_cache: true
 
 # Preload environment for pure nvm install.
-- name: 'Install | nvm {{ jellyseerr__nvm_version }}'
+- name: 'Install | nvm {{ seerr__nvm_version }}'
   ansible.builtin.shell:
-    'set -o pipefail && curl -o- {{ jellyseerr__nvm_url }} | bash'
+    'set -o pipefail && curl -o- {{ seerr__nvm_url }} | bash'
   args:
     executable: '/bin/bash'
-    creates: '{{ _jellyseerr.nvm_sh }}'
-    chdir: '{{ _jellyseerr.nvm_dir }}'
+    creates: '{{ _seerr.nvm_sh }}'
+    chdir: '{{ _seerr.nvm_dir }}'
   environment:
-    NVM_DIR: '{{ _jellyseerr.nvm_dir }}'
+    NVM_DIR: '{{ _seerr.nvm_dir }}'
   changed_when: false
   become: true
-  become_user: '{{ _jellyseerr_srv_user.raw }}'
+  become_user: '{{ _seerr_srv_user.raw }}'
 
-- name: 'Install | nodejs {{ jellyseerr__nvm_nodejs_version }}'
+- name: 'Install | nodejs {{ seerr__nvm_nodejs_version }}'
   ansible.builtin.shell: >
-    source {{ _jellyseerr.nvm_env }} &&
-    nvm install {{ jellyseerr__nvm_nodejs_version }}
+    source {{ _seerr.nvm_env }} &&
+    nvm install {{ seerr__nvm_nodejs_version }}
   args:
     executable: '/bin/bash'
-    chdir: '{{ _jellyseerr.nvm_dir }}'
+    chdir: '{{ _seerr.nvm_dir }}'
   changed_when: false
   become: true
-  become_user: '{{ _jellyseerr_srv_user.raw }}'
+  become_user: '{{ _seerr_srv_user.raw }}'
 
 - name: 'Install | pnpm'
   ansible.builtin.shell:
-    source {{ _jellyseerr.nvm_env }} && corepack enable pnpm
+    source {{ _seerr.nvm_env }} && corepack enable pnpm
   args:
     executable: '/bin/bash'
-    chdir: '{{ _jellyseerr.nvm_dir }}'
+    chdir: '{{ _seerr.nvm_dir }}'
   changed_when: false
   become: true
-  become_user: '{{ _jellyseerr_srv_user.raw }}'
+  become_user: '{{ _seerr_srv_user.raw }}'
 
-- name: 'Install | Jellyseerr package {{ jellyseerr_srv_version }}'
+- name: 'Install | Seerr package {{ seerr_srv_version }}'
   ansible.builtin.include_role:
     name: 'r_pufky.deb.repo'
   vars:
-    repo_release_owner: '{{ jellyseerr_role_repo_release_owner }}'
-    repo_release_repo: '{{ jellyseerr_role_repo_release_repo }}'
-    repo_release_tag: '{{ _jellyseerr_srv_version.raw }}'
-    repo_release_asset: '{{ jellyseerr_role_repo_release_asset }}'
+    repo_release_owner: '{{ seerr_role_repo_release_owner }}'
+    repo_release_repo: '{{ seerr_role_repo_release_repo }}'
+    repo_release_tag: '{{ _seerr_srv_version.raw }}'
+    repo_release_asset: '{{ seerr_role_repo_release_asset }}'
     repo_release_download_source_enable:
-      '{{ jellyseerr_role_repo_release_download_source_enable }}'
-    repo_file_owner: '{{ _jellyseerr_srv_user._uid }}'
-    repo_file_group: '{{ _jellyseerr_srv_group._gid }}'
-    repo_extract_dir: '{{ jellyseerr_role_repo_extract_dir }}'
-    repo_extract_symlink: '{{ jellyseerr_role_repo_extract_symlink }}'
+      '{{ seerr_role_repo_release_download_source_enable }}'
+    repo_file_owner: '{{ _seerr_srv_user._uid }}'
+    repo_file_group: '{{ _seerr_srv_group._gid }}'
+    repo_extract_dir: '{{ seerr_role_repo_extract_dir }}'
+    repo_extract_symlink: '{{ seerr_role_repo_extract_symlink }}'
     repo_extract_migrate_files:
       - 'config/db/db.sqlite3'
-      - 'config/db/db.sqlite3-shm'  # Jellyseerr never closes DB's correctly.
+      - 'config/db/db.sqlite3-shm'  # Seerr never closes DB's correctly.
       - 'config/db/db.sqlite3-wal'
       - 'config/settings.json'
       - 'config/cache'  # Local TMDB image caching.
     repo_extract_delete_old_versions:
-      '{{ _jellyseerr_srv_delete_old_versions_enable.raw }}'
-    repo_force_overwrite: '{{ _jellyseerr_srv_force_overwrite.raw }}'
+      '{{ _seerr_srv_delete_old_versions_enable.raw }}'
+    repo_force_overwrite: '{{ _seerr_srv_force_overwrite.raw }}'
     repo_extract_mode: 'a-st'  # ,o-rwx'
     repo_extract_extra_opts: ['--strip-components=1']
     repo_extract_remove_files:
@@ -155,15 +153,15 @@
 
 - name: 'Install | dependencies'
   ansible.builtin.shell: >
-      source {{ _jellyseerr.nvm_env }} &&
-      {{ _jellyseerr.corepack }} &&
+      source {{ _seerr.nvm_env }} &&
+      {{ _seerr.corepack }} &&
       pnpm install --frozen-lockfile
   args:
     executable: '/bin/bash'
-    chdir: '{{ jellyseerr_role_repo_extract_symlink }}'
+    chdir: '{{ seerr_role_repo_extract_symlink }}'
   environment:
     CYPRESS_INSTALL_BINARY: '0'
     HUSKY: '0'
   changed_when: false
   become: true
-  become_user: '{{ _jellyseerr_srv_user.raw }}'
+  become_user: '{{ _seerr_srv_user.raw }}'

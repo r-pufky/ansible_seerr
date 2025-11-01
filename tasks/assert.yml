@@ -6,192 +6,234 @@
 # Sanity check options to stop preventable errors and accidental data deletion.
 
 - name: 'Assert | email notification requirements'
-  when: jellyseerr_cfg_agents_email_enabled
+  when: seerr_cfg_agents_email_enabled
   ansible.builtin.assert:
     quiet: true
     that:
-      - jellyseerr_cfg_agents_email_email_from | length > 0
-      - jellyseerr_cfg_agents_email_smtp_host | length > 0
-      - jellyseerr_cfg_agents_email_smtp_port is defined
+      - seerr_cfg_agents_email_email_from | length > 0
+      - seerr_cfg_agents_email_smtp_host | length > 0
+      - seerr_cfg_agents_email_smtp_port is defined
     fail_msg: |
-      ✘ Email notifications require all options set:
-
-           jellyseerr_cfg_agents_email_enabled: '{{ jellyseerr_cfg_agents_email_enabled }}'
-        jellyseerr_cfg_agents_email_email_from: '{{ jellyseerr_cfg_agents_email_email_from }}'
-         jellyseerr_cfg_agents_email_smtp_host: '{{ jellyseerr_cfg_agents_email_smtp_host }}'
-         jellyseerr_cfg_agents_email_smtp_port: '{{ jellyseerr_cfg_agents_email_smtp_port }}'
-            jellyseerr_cfg_agents_email_secure: '{{ jellyseerr_cfg_agents_email_secure }}'
-        jellyseerr_cfg_agents_email_ignore_tls: '{{ jellyseerr_cfg_agents_email_ignore_tls }}'
-       jellyseerr_cfg_agents_email_require_tls: '{{ jellyseerr_cfg_agents_email_require_tls }}'
+      ╭───────────────────────────────────────────────────────────────────╮
+      │                                                                   │
+      │           Email notifications require all options set.            │
+      │                                                                   │
+      ├───────────────────────────────────────────────────────────────────╯
+      │ seerr_cfg_agents_email_enabled: '{{ seerr_cfg_agents_email_enabled }}'
+      │ seerr_cfg_agents_email_email_from: '{{ seerr_cfg_agents_email_email_from }}'
+      │ seerr_cfg_agents_email_smtp_host: '{{ seerr_cfg_agents_email_smtp_host }}'
+      │ seerr_cfg_agents_email_smtp_port: '{{ seerr_cfg_agents_email_smtp_port }}'
+      │ seerr_cfg_agents_email_secure: '{{ seerr_cfg_agents_email_secure }}'
+      │ seerr_cfg_agents_email_ignore_tls: '{{ seerr_cfg_agents_email_ignore_tls }}'
+      │ seerr_cfg_agents_email_require_tls: '{{ seerr_cfg_agents_email_require_tls }}'
 
 - name: 'Assert | discord notification requirements'
-  when: jellyseerr_cfg_agents_discord_enabled
+  when: seerr_cfg_agents_discord_enabled
   ansible.builtin.assert:
     quiet: true
-    that: jellyseerr_cfg_agents_discord_webhook_url | length > 0
+    that: seerr_cfg_agents_discord_webhook_url | length > 0
     fail_msg: |
-      ✘ Discord notifications require all options set:
-
-          jellyseerr_cfg_agents_discord_enabled: '{{ jellyseerr_cfg_agents_discord_enabled }}'
-      jellyseerr_cfg_agents_discord_webhook_url: '{{ jellyseerr_cfg_agents_discord_webhook_url }}'
+      ╭───────────────────────────────────────────────────────────────────╮
+      │                                                                   │
+      │          Discord notifications require all options set.           │
+      │                                                                   │
+      ├───────────────────────────────────────────────────────────────────╯
+      │ seerr_cfg_agents_discord_enabled: '{{ seerr_cfg_agents_discord_enabled }}'
+      │ seerr_cfg_agents_discord_webhook_url: '{{ seerr_cfg_agents_discord_webhook_url }}'
 
 - name: 'Assert | gotify notification requirements'
-  when: jellyseerr_cfg_agents_gotify_enabled
+  when: seerr_cfg_agents_gotify_enabled
   ansible.builtin.assert:
     quiet: true
     that:
-      - jellyseerr_cfg_agents_gotify_url | length > 0
-      - jellyseerr_cfg_agents_gotify_token | length > 0
-      - jellyseerr_cfg_agents_gotify_priority is defined
+      - seerr_cfg_agents_gotify_url | length > 0
+      - seerr_cfg_agents_gotify_token | length > 0
+      - seerr_cfg_agents_gotify_priority is defined
     fail_msg: |
-      ✘ Gotify notifications require all options set:
-
-       jellyseerr_cfg_agents_gotify_enabled: '{{ jellyseerr_cfg_agents_gotify_enabled }}'
-           jellyseerr_cfg_agents_gotify_url: '{{ jellyseerr_cfg_agents_gotify_url }}'
-         jellyseerr_cfg_agents_gotify_token: '{{ jellyseerr_cfg_agents_gotify_token }}'
-      jellyseerr_cfg_agents_gotify_priority: '{{ jellyseerr_cfg_agents_gotify_priority }}'
+      ╭───────────────────────────────────────────────────────────────────╮
+      │                                                                   │
+      │           Gotify notifications require all options set.           │
+      │                                                                   │
+      ├───────────────────────────────────────────────────────────────────╯
+      │ seerr_cfg_agents_gotify_enabled: '{{ seerr_cfg_agents_gotify_enabled }}'
+      │ seerr_cfg_agents_gotify_url: '{{ seerr_cfg_agents_gotify_url }}'
+      │ seerr_cfg_agents_gotify_token: '{{ seerr_cfg_agents_gotify_token }}'
+      │ seerr_cfg_agents_gotify_priority: '{{ seerr_cfg_agents_gotify_priority }}'
 
 - name: 'Assert | ntfy.sh notification requirements'
-  when: jellyseerr_cfg_agents_ntfy_enabled
+  when: seerr_cfg_agents_ntfy_enabled
   ansible.builtin.assert:
     quiet: true
     that:
-      - jellyseerr_cfg_agents_ntfy_url | length > 0
-      - jellyseerr_cfg_agents_ntfy_topic | length > 0
+      - seerr_cfg_agents_ntfy_url | length > 0
+      - seerr_cfg_agents_ntfy_topic | length > 0
     fail_msg: |
-      ✘ notfy.sh notifications require all options set:
-
-      jellyseerr_cfg_agents_ntfy_enabled: '{{ jellyseerr_cfg_agents_gotify_enabled }}'
-          jellyseerr_cfg_agents_ntfy_url: '{{ jellyseerr_cfg_agents_gotify_url }}'
-        jellyseerr_cfg_agents_ntfy_topic: '{{ jellyseerr_cfg_agents_gotify_token }}'
+      ╭───────────────────────────────────────────────────────────────────╮
+      │                                                                   │
+      │          notfy.sh notifications require all options set.          │
+      │                                                                   │
+      ├───────────────────────────────────────────────────────────────────╯
+      │ seerr_cfg_agents_ntfy_enabled: '{{ seerr_cfg_agents_gotify_enabled }}'
+      │ seerr_cfg_agents_ntfy_url: '{{ seerr_cfg_agents_gotify_url }}'
+      │ seerr_cfg_agents_ntfy_topic: '{{ seerr_cfg_agents_gotify_token }}'
 
 - name: 'Assert | ntfy.sh user password requirements'
-  when: jellyseerr_cfg_agents_ntfy_auth_method_username_password
+  when: seerr_cfg_agents_ntfy_auth_method_username_password
   ansible.builtin.assert:
     quiet: true
     that:
-      - jellyseerr_cfg_agents_ntfy_username | length > 0
-      - jellyseerr_cfg_agents_ntfy_password | length > 0
+      - seerr_cfg_agents_ntfy_username | length > 0
+      - seerr_cfg_agents_ntfy_password | length > 0
     fail_msg: |
-      ✘ notfy.sh notifications require all options set:
-
-      jellyseerr_cfg_agents_ntfy_auth_method_username_password: '{{ jellyseerr_cfg_agents_ntfy_auth_method_username_password }}'
-                           jellyseerr_cfg_agents_ntfy_username: '{{ jellyseerr_cfg_agents_ntfy_username }}'
-                           jellyseerr_cfg_agents_ntfy_password: '{{ jellyseerr_cfg_agents_ntfy_password }}'
+      ╭───────────────────────────────────────────────────────────────────╮
+      │                                                                   │
+      │         notfy.sh password auth requires all options set.          │
+      │                                                                   │
+      ├───────────────────────────────────────────────────────────────────╯
+      │ seerr_cfg_agents_ntfy_auth_method_username_password: '{{ seerr_cfg_agents_ntfy_auth_method_username_password }}'
+      │ seerr_cfg_agents_ntfy_username: '{{ seerr_cfg_agents_ntfy_username }}'
+      │ seerr_cfg_agents_ntfy_password: '{{ seerr_cfg_agents_ntfy_password }}'
 
 - name: 'Assert | ntfy.sh token requirements'
-  when: jellyseerr_cfg_agents_ntfy_auth_method_token
+  when: seerr_cfg_agents_ntfy_auth_method_token
   ansible.builtin.assert:
     quiet: true
-    that: jellyseerr_cfg_agents_ntfy_token | length > 0
+    that: seerr_cfg_agents_ntfy_token | length > 0
     fail_msg: |
-      ✘ notfy.sh notifications require all options set:
-
-      jellyseerr_cfg_agents_ntfy_auth_method_token: '{{ jellyseerr_cfg_agents_ntfy_auth_method_token }}'
-                  jellyseerr_cfg_agents_ntfy_token: '{{ jellyseerr_cfg_agents_ntfy_token }}'
+      ╭───────────────────────────────────────────────────────────────────╮
+      │                                                                   │
+      │           notfy.sh token auth requires all options set.           │
+      │                                                                   │
+      ├───────────────────────────────────────────────────────────────────╯
+      │ seerr_cfg_agents_ntfy_auth_method_token: '{{ seerr_cfg_agents_ntfy_auth_method_token }}'
+      │ seerr_cfg_agents_ntfy_token: '{{ seerr_cfg_agents_ntfy_token }}'
 
 - name: 'Assert | pushbullet notification requirements'
-  when: jellyseerr_cfg_agents_pushbullet_enabled
+  when: seerr_cfg_agents_pushbullet_enabled
   ansible.builtin.assert:
     quiet: true
-    that: jellyseerr_cfg_agents_pushbullet_access_token | length > 0
+    that: seerr_cfg_agents_pushbullet_access_token | length > 0
     fail_msg: |
-      ✘ Pushbullet notifications require all options set:
-
-           jellyseerr_cfg_agents_pushbullet_enabled: '{{ jellyseerr_cfg_agents_pushbullet_enabled }}'
-      jellyseerr_cfg_agents_pushbullet_access_token: '{{ jellyseerr_cfg_agents_pushbullet_access_token }}'
+      ╭───────────────────────────────────────────────────────────────────╮
+      │                                                                   │
+      │         Pushbullet notifications require all options set.         │
+      │                                                                   │
+      ├───────────────────────────────────────────────────────────────────╯
+      │ seerr_cfg_agents_pushbullet_enabled: '{{ seerr_cfg_agents_pushbullet_enabled }}'
+      │ seerr_cfg_agents_pushbullet_access_token: '{{ seerr_cfg_agents_pushbullet_access_token }}'
 
 - name: 'Assert | pushover notification requirements'
-  when: jellyseerr_cfg_agents_pushover_enabled
+  when: seerr_cfg_agents_pushover_enabled
   ansible.builtin.assert:
     quiet: true
     that:
-      - jellyseerr_cfg_agents_pushover_access_token | length > 0
-      - jellyseerr_cfg_agents_pushover_user_token | length > 0
+      - seerr_cfg_agents_pushover_access_token | length > 0
+      - seerr_cfg_agents_pushover_user_token | length > 0
     fail_msg: |
-      ✘ Pushover notifications require all options set:
-
-           jellyseerr_cfg_agents_pushover_enabled: '{{ jellyseerr_cfg_agents_pushover_enabled }}'
-      jellyseerr_cfg_agents_pushover_access_token: '{{ jellyseerr_cfg_agents_pushover_access_token }}'
-        jellyseerr_cfg_agents_pushover_user_token: '{{ jellyseerr_cfg_agents_pushover_user_token }}'
+      ╭───────────────────────────────────────────────────────────────────╮
+      │                                                                   │
+      │          Pushover notifications require all options set.          │
+      │                                                                   │
+      ├───────────────────────────────────────────────────────────────────╯
+      │ seerr_cfg_agents_pushover_enabled: '{{ seerr_cfg_agents_pushover_enabled }}'
+      │ seerr_cfg_agents_pushover_access_token: '{{ seerr_cfg_agents_pushover_access_token }}'
+      │ seerr_cfg_agents_pushover_user_token: '{{ seerr_cfg_agents_pushover_user_token }}'
 
 - name: 'Assert | slack notification requirements'
-  when: jellyseerr_cfg_agents_slack_enabled
+  when: seerr_cfg_agents_slack_enabled
   ansible.builtin.assert:
     quiet: true
-    that: jellyseerr_cfg_agents_slack_webhook_url | length > 0
+    that: seerr_cfg_agents_slack_webhook_url | length > 0
     fail_msg: |
-      ✘ Slack notifications require all options set:
-
-           jellyseerr_cfg_agents_slack_enabled: '{{ jellyseerr_cfg_agents_slack_enabled }}'
-      jellyseerr_cfg_agents_slack_webhook_url: '{{ jellyseerr_cfg_agents_slack_webhook_url }}'
+      ╭───────────────────────────────────────────────────────────────────╮
+      │                                                                   │
+      │           Slack notifications require all options set.            │
+      │                                                                   │
+      ├───────────────────────────────────────────────────────────────────╯
+      │ seerr_cfg_agents_slack_enabled: '{{ seerr_cfg_agents_slack_enabled }}'
+      │ seerr_cfg_agents_slack_webhook_url: '{{ seerr_cfg_agents_slack_webhook_url }}'
 
 - name: 'Assert | telegram notification requirements'
-  when: jellyseerr_cfg_agents_telegram_enabled
+  when: seerr_cfg_agents_telegram_enabled
   ansible.builtin.assert:
     quiet: true
     that:
-      - jellyseerr_cfg_agents_telegram_bot_api | length > 0
-      - jellyseerr_cfg_agents_telegram_chat_id | length > 0
+      - seerr_cfg_agents_telegram_bot_api | length > 0
+      - seerr_cfg_agents_telegram_chat_id | length > 0
     fail_msg: |
-      ✘ Telegram notifications require all options set:
-
-      jellyseerr_cfg_agents_telegram_enabled: '{{ jellyseerr_cfg_agents_telegram_enabled }}'
-      jellyseerr_cfg_agents_telegram_bot_api: '{{ jellyseerr_cfg_agents_telegram_bot_api }}'
-      jellyseerr_cfg_agents_telegram_chat_id: '{{ jellyseerr_cfg_agents_telegram_chat_id }}'
+      ╭───────────────────────────────────────────────────────────────────╮
+      │                                                                   │
+      │          Telegram notifications require all options set.          │
+      │                                                                   │
+      ├───────────────────────────────────────────────────────────────────╯
+      │ seerr_cfg_agents_telegram_enabled: '{{ seerr_cfg_agents_telegram_enabled }}'
+      │ seerr_cfg_agents_telegram_bot_api: '{{ seerr_cfg_agents_telegram_bot_api }}'
+      │ seerr_cfg_agents_telegram_chat_id: '{{ seerr_cfg_agents_telegram_chat_id }}'
 
 - name: 'Assert | web push requires HTTPS'
-  when: jellyseerr_cfg_agents_webpush_enabled
+  when: seerr_cfg_agents_webpush_enabled
   ansible.builtin.assert:
     quiet: true
     that:
-      - jellyseerr_cfg_trust_proxy or jellyseerr_cfg_proxy_enabled
+      - seerr_cfg_trust_proxy or seerr_cfg_proxy_enabled
     fail_msg: |
-      ✘ Web Push notifications require reverse proxy enabled:
+      ╭───────────────────────────────────────────────────────────────────╮
+      │                                                                   │
+      │          Web Push notifications require all options set.          │
+      │                                                                   │
+      ├───────────────────────────────────────────────────────────────────╯
+      │ seerr_cfg_agents_webpush_enabled: '{{ seerr_cfg_agents_webpush_enabled }}'
+      │ seerr_cfg_trust_proxy: '{{ seerr_cfg_trust_proxy }}'
+      │ seerr_cfg_proxy_enabled: '{{ seerr_cfg_proxy_enabled }}'
 
-      jellyseerr_cfg_agents_webpush_enabled: '{{ jellyseerr_cfg_agents_webpush_enabled }}'
-                 jellyseerr_cfg_trust_proxy: '{{ jellyseerr_cfg_trust_proxy }}'
-               jellyseerr_cfg_proxy_enabled: '{{ jellyseerr_cfg_proxy_enabled }}'
-
-      See: https://docs.jellyseerr.dev/using-jellyseerr/notifications/webpush
+      See: https://docs.seerr.dev/using-seerr/notifications/webpush
 
 - name: 'Assert | webhook notification requirements'
-  when: jellyseerr_cfg_agents_webhook_enabled
+  when: seerr_cfg_agents_webhook_enabled
   ansible.builtin.assert:
     quiet: true
     that:
-      - jellyseerr_cfg_agents_webhook_webhook_url | length > 0
-      - jellyseerr_cfg_agents_webhook_json_payload | length > 0
+      - seerr_cfg_agents_webhook_webhook_url | length > 0
+      - seerr_cfg_agents_webhook_json_payload | length > 0
     fail_msg: |
-      ✘ Webhook notifications require all options set:
-
-           jellyseerr_cfg_agents_webhook_enabled: '{{ jellyseerr_cfg_agents_webhook_enabled }}'
-       jellyseerr_cfg_agents_webhook_webhook_url: '{{ jellyseerr_cfg_agents_webhook_webhook_url }}'
-      jellyseerr_cfg_agents_webhook_json_payload: '{{ jellyseerr_cfg_agents_webhook_json_payload }}'
+      ╭───────────────────────────────────────────────────────────────────╮
+      │                                                                   │
+      │          Webhook notifications require all options set.           │
+      │                                                                   │
+      ├───────────────────────────────────────────────────────────────────╯
+      │ seerr_cfg_agents_webhook_enabled: '{{ seerr_cfg_agents_webhook_enabled }}'
+      │ seerr_cfg_agents_webhook_webhook_url: '{{ seerr_cfg_agents_webhook_webhook_url }}'
+      │ seerr_cfg_agents_webhook_json_payload: '{{ seerr_cfg_agents_webhook_json_payload }}'
 
 - name: 'Assert | owner defined'
   ansible.builtin.assert:
     quiet: true
     that:
-      - jellyseerr_srv_owner_email | length > 0
-      - jellyseerr_srv_owner_username | length > 0
-      - jellyseerr_srv_owner_password | length > 0
-      - jellyseerr_srv_owner_avatar | length > 0
+      - seerr_srv_owner_email | length > 0
+      - seerr_srv_owner_username | length > 0
+      - seerr_srv_owner_password | length > 0
+      - seerr_srv_owner_avatar | length > 0
     fail_msg: |
-      ✘ Owner must be defined:
-
-         jellyseerr_srv_owner_email: '{{ jellyseerr_srv_owner_email }}'
-      jellyseerr_srv_owner_username: '{{ jellyseerr_srv_owner_username }}'
-      jellyseerr_srv_owner_password: '{{ jellyseerr_srv_owner_password }}'
-        jellyseerr_srv_owner_avatar: '{{ jellyseerr_srv_owner_avatar }}'
+      ╭───────────────────────────────────────────────────────────────────╮
+      │                                                                   │
+      │                      Owner must be defined.                       │
+      │                                                                   │
+      ├───────────────────────────────────────────────────────────────────╯
+      │ seerr_srv_owner_email: '{{ seerr_srv_owner_email }}'
+      │ seerr_srv_owner_username: '{{ seerr_srv_owner_username }}'
+      │ seerr_srv_owner_password: '{{ seerr_srv_owner_password }}'
+      │ seerr_srv_owner_avatar: '{{ seerr_srv_owner_avatar }}'
 
 - name: 'Assert | postgres server options mutually exclusive'
-  when: jellyseerr_cfg_db_type != 'sqlite'
+  when: seerr_cfg_db_type != 'sqlite'
   ansible.builtin.assert:
     quiet: true
-    that: jellyseerr_cfg_db_host != jellyseerr_cfg_db_socket_path
+    that: seerr_cfg_db_host != seerr_cfg_db_socket_path
     fail_msg: |
-      ✘ postgres server options are mutually exclusive:
-
-             jellyseerr_cfg_db_host: '{{ jellyseerr_cfg_db_host }}'
-      jellyseerr_cfg_db_socket_path: '{{ jellyseerr_cfg_db_socket_path }}'
+      ╭───────────────────────────────────────────────────────────────────╮
+      │                                                                   │
+      │          Postgres server options are mutually exclusive.          │
+      │                                                                   │
+      ├───────────────────────────────────────────────────────────────────╯
+      │ seerr_cfg_db_host: '{{ seerr_cfg_db_host }}'
+      │ seerr_cfg_db_socket_path: '{{ seerr_cfg_db_socket_path }}'

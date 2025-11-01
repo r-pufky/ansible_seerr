@@ -1,10 +1,10 @@
 ---
 ###############################################################################
-# Jellyseerr Config
+# Seerr Config
 ###############################################################################
 #
 # Configuration:
-# * service: jellyseerr.conf
+# * service: seerr.conf
 # * application: config/settings.json
 # * db: config/db/db.sqlite3
 # * update check: committag.json
@@ -13,12 +13,12 @@
 # automatically migrated to a updated installation if enabled.
 #
 # Reference:
-# * https://docs.jellyseerr.dev/getting-started/buildfromsource
-# * https://api-docs.jellyseerr.dev/
+# * https://docs.seerr.dev/getting-started/buildfromsource
+# * https://api-docs.seerr.dev/
 
-- name: 'Install | {{ jellyseerr_role_etc_dir }}'
+- name: 'Install | {{ seerr_role_etc_dir }}'
   ansible.builtin.file:
-    path: '{{ jellyseerr_role_etc_dir }}'
+    path: '{{ seerr_role_etc_dir }}'
     owner: 'root'
     group: 'root'
     mode: '0755'
@@ -26,99 +26,99 @@
 
 - name: 'Config | set service options'
   ansible.builtin.template:
-    src: 'jellyseerr.conf.j2'
-    dest: '{{ jellyseerr_role_service_cfg }}'
-    owner: '{{ _jellyseerr_srv_user._uid }}'
-    group: '{{ _jellyseerr_srv_group._gid }}'
+    src: 'seerr.conf.j2'
+    dest: '{{ seerr_role_service_cfg }}'
+    owner: '{{ _seerr_srv_user._uid }}'
+    group: '{{ _seerr_srv_group._gid }}'
     mode: '0640'
 
-- name: 'Config | set Jellyseerr config'
+- name: 'Config | set Seerr config'
   ansible.builtin.template:
     src: 'settings.json.j2'
-    dest: '{{ jellyseerr_role_settings_cfg }}'
-    owner: '{{ _jellyseerr_srv_user._uid }}'
-    group: '{{ _jellyseerr_srv_group._gid }}'
+    dest: '{{ seerr_role_settings_cfg }}'
+    owner: '{{ _seerr_srv_user._uid }}'
+    group: '{{ _seerr_srv_group._gid }}'
     mode: '0640'
 
 - name: 'Config | secure config directories'
   ansible.builtin.file:
-    path: '{{ jellyseerr_role_config_dir }}'
-    owner: '{{ _jellyseerr_srv_user._uid }}'
-    group: '{{ _jellyseerr_srv_group._gid }}'
+    path: '{{ seerr_role_config_dir }}'
+    owner: '{{ _seerr_srv_user._uid }}'
+    group: '{{ _seerr_srv_group._gid }}'
     mode: 'o-rwx'
     recurse: true
     state: 'directory'
 
 - name: 'Config | set CA file'
-  when: _jellyseerr_cfg_db_ssl_ca_file.raw | length > 0
+  when: _seerr_cfg_db_ssl_ca_file.raw | length > 0
   ansible.builtin.copy:
-    src: '{{ _jellyseerr_cfg_db_ssl_ca_file.raw }}'
-    dest: '{{ _jellyseerr_cfg_db_ssl_ca_file._dest }}'
-    owner: '{{ _jellyseerr_srv_user._uid }}'
-    group: '{{ _jellyseerr_srv_group._gid }}'
-    mode: '{{ _jellyseerr_cfg_db_ssl_ca_file._perms }}'
+    src: '{{ _seerr_cfg_db_ssl_ca_file.raw }}'
+    dest: '{{ _seerr_cfg_db_ssl_ca_file._dest }}'
+    owner: '{{ _seerr_srv_user._uid }}'
+    group: '{{ _seerr_srv_group._gid }}'
+    mode: '{{ _seerr_cfg_db_ssl_ca_file._perms }}'
     force: true
 
 - name: 'Config | reset CA file'
-  when: _jellyseerr_cfg_db_ssl_ca_file.raw | length == 0
+  when: _seerr_cfg_db_ssl_ca_file.raw | length == 0
   ansible.builtin.file:
-    path: '{{ _jellyseerr_cfg_db_ssl_ca_file._dest }}'
+    path: '{{ _seerr_cfg_db_ssl_ca_file._dest }}'
     state: 'absent'
 
 - name: 'Config | set private key file'
-  when: _jellyseerr_cfg_db_ssl_key_file.raw | length > 0
+  when: _seerr_cfg_db_ssl_key_file.raw | length > 0
   ansible.builtin.copy:
-    src: '{{ _jellyseerr_cfg_db_ssl_key_file.raw }}'
-    dest: '{{ _jellyseerr_cfg_db_ssl_key_file._dest }}'
-    owner: '{{ _jellyseerr_srv_user._uid }}'
-    group: '{{ _jellyseerr_srv_group._gid }}'
-    mode: '{{ _jellyseerr_cfg_db_ssl_key_file._perms }}'
+    src: '{{ _seerr_cfg_db_ssl_key_file.raw }}'
+    dest: '{{ _seerr_cfg_db_ssl_key_file._dest }}'
+    owner: '{{ _seerr_srv_user._uid }}'
+    group: '{{ _seerr_srv_group._gid }}'
+    mode: '{{ _seerr_cfg_db_ssl_key_file._perms }}'
     force: true
 
 - name: 'Config | reset private key file'
-  when: _jellyseerr_cfg_db_ssl_key_file.raw | length == 0
+  when: _seerr_cfg_db_ssl_key_file.raw | length == 0
   ansible.builtin.file:
-    path: '{{ _jellyseerr_cfg_db_ssl_key_file._dest }}'
+    path: '{{ _seerr_cfg_db_ssl_key_file._dest }}'
     state: 'absent'
 
 - name: 'Config | set certificate chain file'
-  when: _jellyseerr_cfg_db_ssl_cert_file.raw | length > 0
+  when: _seerr_cfg_db_ssl_cert_file.raw | length > 0
   ansible.builtin.copy:
-    src: '{{ _jellyseerr_cfg_db_ssl_cert_file.raw }}'
-    dest: '{{ _jellyseerr_cfg_db_ssl_cert_file._dest }}'
-    owner: '{{ _jellyseerr_srv_user._uid }}'
-    group: '{{ _jellyseerr_srv_group._gid }}'
-    mode: '{{ _jellyseerr_cfg_db_ssl_cert_file._perms }}'
+    src: '{{ _seerr_cfg_db_ssl_cert_file.raw }}'
+    dest: '{{ _seerr_cfg_db_ssl_cert_file._dest }}'
+    owner: '{{ _seerr_srv_user._uid }}'
+    group: '{{ _seerr_srv_group._gid }}'
+    mode: '{{ _seerr_cfg_db_ssl_cert_file._perms }}'
     force: true
 
 - name: 'Config | reset certificate chain file'
-  when: _jellyseerr_cfg_db_ssl_cert_file.raw | length == 0
+  when: _seerr_cfg_db_ssl_cert_file.raw | length == 0
   ansible.builtin.file:
-    path: '{{ _jellyseerr_cfg_db_ssl_cert_file._dest }}'
+    path: '{{ _seerr_cfg_db_ssl_cert_file._dest }}'
     state: 'absent'
 
 - name: 'Config | resolve node location'
   ansible.builtin.shell:
-    source {{ _jellyseerr.nvm_env }} &&
+    source {{ _seerr.nvm_env }} &&
     which node
   args:
     executable: '/bin/bash'
   changed_when: false
   become: true
-  become_user: '{{ _jellyseerr_srv_user.raw }}'
-  register: _jellyseerr_node_path
+  become_user: '{{ _seerr_srv_user.raw }}'
+  register: _seerr_node_path
 
-- name: 'Config | Jellyseerr service'
+- name: 'Config | Seerr service'
   ansible.builtin.include_role:
     name: 'r_pufky.deb.systemd'
   vars:
     systemd_daemon_reload_enable: true
     systemd_services:
-      - name: 'jellyseerr'
+      - name: 'seerr'
         state: 'present'
         drop_in: false
         unit:
-          description: 'Jellyseerr Daemon'
+          description: 'Seerr Daemon'
           wants:
             - 'network.target'
           after:
@@ -126,12 +126,12 @@
         service:
           type: 'exec'
           exec_start:
-            - '{{ _jellyseerr_node_path.stdout }} dist/index.js'
+            - '{{ _seerr_node_path.stdout }} dist/index.js'
           timeout_stop_sec: 20
           restart: 'always'  # Always restart for periodic service restarts.
           runtime_max_sec: '{{
               "1d"
-              if _jellyseerr_srv_restart_daily_enable.raw else
+              if _seerr_srv_restart_daily_enable.raw else
               "infinity"
             }}'
         exec:
@@ -139,11 +139,11 @@
             - var: 'NODE_ENV'
               value: 'production'
           environment_file:
-            - '{{ jellyseerr_role_service_cfg }}'
-          working_directory: '{{ jellyseerr_role_opt_dir }}'
-          user: '{{ _jellyseerr_srv_user.raw }}'
-          group: '{{ _jellyseerr_srv_group.raw }}'
-          u_mask: '{{ _jellyseerr_srv_u_mask.raw }}'
+            - '{{ seerr_role_service_cfg }}'
+          working_directory: '{{ seerr_role_opt_dir }}'
+          user: '{{ _seerr_srv_user.raw }}'
+          group: '{{ _seerr_srv_group.raw }}'
+          u_mask: '{{ _seerr_srv_u_mask.raw }}'
         kill:
           kill_mode: 'process'
         install:
@@ -159,7 +159,7 @@
     state: 'started'
   failed_when: false
   loop:
-    - 'jellyseerr.service'
+    - 'seerr.service'
 
 - name: 'Config | start services'
   ansible.builtin.meta: 'flush_handlers'

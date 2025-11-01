@@ -3,15 +3,15 @@
 # Plex Media Server (settings.json > plex)
 ###############################################################################
 # Documented usage here reflect code, installer, and WebUI analysis. HIGHLY
-# recommend to configure Jellyseerr in the WebUI and migrate settings here.
+# recommend to configure Seerr in the WebUI and migrate settings here.
 #
-# set jellyseerr_cfg_media_server_type to set the correct media server to use.
+# set seerr_cfg_media_server_type to set the correct media server to use.
 #
 # Reference:
-# * https://docs.jellyseerr.dev/using-jellyseerr/settings/mediaserver
+# * https://docs.seerr.dev/using-seerr/settings/mediaserver
 
 # Plex server friendly name. Default: ''.
-jellyseerr_cfg_plex_name: ''
+seerr_cfg_plex_name: ''
 
 # Plex server IP or DNS name.
 #
@@ -20,27 +20,27 @@ jellyseerr_cfg_plex_name: ''
 # and Users > 'Import Plex Users' will return no results. If you are using plex
 # behind a proxy this is your external proxy address.
 #
-# Wildcard certificates will cause Jellyseerr to FAIL to connect with:
+# Wildcard certificates will cause Seerr to FAIL to connect with:
 #
 #  Hostname/IP does not match certificate's altnames:
 #      IP: {IP} is not in the cert's list
 #
 # Load available servers and use the plex.direct local link.
 #
-# Enabling jellyseerr_cfg_new_plex_login will allow plex users with library
+# Enabling seerr_cfg_new_plex_login will allow plex users with library
 # access to sign-in without being imported.
 #
 # Default: ''.
-jellyseerr_cfg_plex_ip: ''
+seerr_cfg_plex_ip: ''
 
 # Plex server port. Default: 32400.
-jellyseerr_cfg_plex_port: 32400
+seerr_cfg_plex_port: 32400
 
 # Use HTTPS for plex connections.
 #
 # Self-signed certificates are not supported.
 #
-# Wildcard certificates will cause Jellyseerr to FAIL to connect with:
+# Wildcard certificates will cause Seerr to FAIL to connect with:
 #
 #  Hostname/IP does not match certificate's altnames:
 #      IP: {IP} is not in the cert's list
@@ -48,16 +48,16 @@ jellyseerr_cfg_plex_port: 32400
 # Load available servers and use the plex.direct local link.
 #
 # Default: False.
-jellyseerr_cfg_plex_use_ssl: false
+seerr_cfg_plex_use_ssl: false
 
 # Plex libraries to scan for existing titles.
 #
 # HIGHLY RECOMMEND manual configuration of plex settings (sync libraries,
 # manual library scan) then migrate values after initial installation.
 #
-# jellyseerr_cfg_plex_libraries:
+# seerr_cfg_plex_libraries:
 #     list of dict - plex library settings.
-#   - id: int - Jellyseerr order ID starting at 1.
+#   - id: int - Seerr order ID starting at 1.
 #     name: str - Plex library name.
 #     enabled: bool - Enable scanning of plex library.
 #         Default: True.
@@ -69,7 +69,7 @@ jellyseerr_cfg_plex_use_ssl: false
 #     last_scan: int - unixtimestmp of last scan.
 #         Default: 0 (EPOC - force scan).
 #
-# jellyseerr_cfg_plex_libraries:
+# seerr_cfg_plex_libraries:
 #   - id: 1
 #     name: 'TV Shows'
 #     enabled: true
@@ -82,7 +82,7 @@ jellyseerr_cfg_plex_use_ssl: false
 #     last_scan: 0
 #
 # Default: [].
-jellyseerr_cfg_plex_libraries: []
+seerr_cfg_plex_libraries: []
 
 # Direct users to alternative plex web app player.
 #
@@ -94,11 +94,11 @@ jellyseerr_cfg_plex_libraries: []
 # https://plex.myawesomeserver.com/web).
 #
 # Default: '' (use 'https://app.plex.tv/desktop').
-jellyseerr_cfg_plex_web_app_url: ''
+seerr_cfg_plex_web_app_url: ''
 
 # Plex machine ID used to claim the server (plex processed machine identifier).
 #
 # Found in Plex 'Preferences.xml' as 'ProcessedMachineIdentifier'.
 #
 # Default: ''.
-jellyseerr_cfg_plex_machine_id: ''
+seerr_cfg_plex_machine_id: ''

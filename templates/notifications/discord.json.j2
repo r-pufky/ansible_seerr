@@ -1,11 +1,11 @@
    "discord": {
-    "enabled": {{ _jellyseerr_cfg_agents_discord_enabled.raw | lower }},
-    "types": {{ _jellyseerr_cfg_agents_discord_types.raw }},
+    "enabled": {{ _seerr_cfg_agents_discord_enabled.raw | lower }},
+    "types": {{ _seerr_cfg_agents_discord_types.raw }},
     "options": {
-     "webhookUrl": "{{ _jellyseerr_cfg_agents_discord_webhook_url.raw }}",
-     "botUsername": "{{ _jellyseerr_cfg_agents_discord_bot_username.raw }}",
-     "botAvatarUrl": "{{ _jellyseerr_cfg_agents_discord_bot_avatar_url.raw }}",
-     "webhookRoleId": "{{ _jellyseerr_cfg_agents_discord_webhook_role_id.raw }}",
-     "enableMentions":  {{ _jellyseerr_cfg_agents_discord_enable_mentions | bool | default(true) | lower }}
+     "webhookUrl": "{{ _seerr_cfg_agents_discord_webhook_url.raw }}",
+     "botUsername": "{{ _seerr_cfg_agents_discord_bot_username.raw }}",
+     "botAvatarUrl": "{{ _seerr_cfg_agents_discord_bot_avatar_url.raw }}",
+     "webhookRoleId": "{{ _seerr_cfg_agents_discord_webhook_role_id.raw }}",
+     "enableMentions":  {{ _seerr_cfg_agents_discord_enable_mentions | bool | default(true) | lower }}
     }
    },

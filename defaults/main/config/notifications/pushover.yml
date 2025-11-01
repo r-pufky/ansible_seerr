@@ -8,10 +8,10 @@
 # notification types are dependent on user permissions.
 #
 # Reference:
-# * https://docs.jellyseerr.dev/using-jellyseerr/notifications/pushover
+# * https://docs.seerr.dev/using-seerr/notifications/pushover
 
 # Enable pushover notifications. Default: False.
-jellyseerr_cfg_agents_pushover_enabled: false
+seerr_cfg_agents_pushover_enabled: false
 
 # Application API token.
 #
@@ -19,7 +19,7 @@ jellyseerr_cfg_agents_pushover_enabled: false
 #
 # Reference:
 # * https://pushover.net/api#registration
-jellyseerr_cfg_agents_pushover_access_token: ''
+seerr_cfg_agents_pushover_access_token: ''
 
 # User/group key.
 #
@@ -30,7 +30,7 @@ jellyseerr_cfg_agents_pushover_access_token: ''
 #
 # Reference:
 # * https://pushover.net/api#identifiers
-jellyseerr_cfg_agents_pushover_user_token: ''
+seerr_cfg_agents_pushover_user_token: ''
 
 # Notification sound.
 #
@@ -38,7 +38,7 @@ jellyseerr_cfg_agents_pushover_user_token: ''
 #
 # Reference:
 # * https://pushover.net/api#sounds
-jellyseerr_cfg_agents_pushover_sound: ''
+seerr_cfg_agents_pushover_sound: ''
 
 # Allowed notification types.
 #
@@ -61,7 +61,7 @@ jellyseerr_cfg_agents_pushover_sound: ''
 #   2048: Issue reopened (issues are reopened).
 #
 # Allow 'request pending approval', 'request declined', 'issue reported':
-# jellyseerr_cfg_agents_pushover_types: 322
+# seerr_cfg_agents_pushover_types: 322
 #
 # Default: 0.
-jellyseerr_cfg_agents_pushover_types: 0
+seerr_cfg_agents_pushover_types: 0

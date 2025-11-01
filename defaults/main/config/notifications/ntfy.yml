@@ -6,53 +6,53 @@
 # * https://docs.ntfy.sh/
 
 # Enable notifications? Default: False.
-jellyseerr_cfg_agents_ntfy_enabled: false
+seerr_cfg_agents_ntfy_enabled: false
 
 # Server root URL. Default: ''.
-jellyseerr_cfg_agents_ntfy_url: ''
+seerr_cfg_agents_ntfy_url: ''
 
 # Topic. Default: ''.
-jellyseerr_cfg_agents_ntfy_topic: ''
+seerr_cfg_agents_ntfy_topic: ''
 
 # Use username/password authentication?
 #
 # Requires:
-#   jellyseerr_cfg_agents_ntfy_username, jellyseerr_cfg_agents_ntfy_password.
+#   seerr_cfg_agents_ntfy_username, seerr_cfg_agents_ntfy_password.
 #
 # Disables token authentication.
 #
 # Default: False.
-jellyseerr_cfg_agents_ntfy_auth_method_username_password: false
+seerr_cfg_agents_ntfy_auth_method_username_password: false
 
 # Username.
 #
-# Requires: jellyseerr_cfg_agents_ntfy_auth_method_username_password.
+# Requires: seerr_cfg_agents_ntfy_auth_method_username_password.
 #
 # Default: ''.
-jellyseerr_cfg_agents_ntfy_username: ''
+seerr_cfg_agents_ntfy_username: ''
 
 # Password.
 #
-# Requires: jellyseerr_cfg_agents_ntfy_auth_method_username_password.
+# Requires: seerr_cfg_agents_ntfy_auth_method_username_password.
 #
 # Default: ''.
-jellyseerr_cfg_agents_ntfy_password: ''
+seerr_cfg_agents_ntfy_password: ''
 
 # Use token authentication?
 #
-# Requires: jellyseerr_cfg_agents_ntfy_token.
+# Requires: seerr_cfg_agents_ntfy_token.
 #
 # Disables username/password authentication.
 #
 # Default: False.
-jellyseerr_cfg_agents_ntfy_auth_method_token: false
+seerr_cfg_agents_ntfy_auth_method_token: false
 
 # Username.
 #
-# Requires: jellyseerr_cfg_agents_ntfy_auth_method_token.
+# Requires: seerr_cfg_agents_ntfy_auth_method_token.
 #
 # Default: ''.
-jellyseerr_cfg_agents_ntfy_token: ''
+seerr_cfg_agents_ntfy_token: ''
 
 # ntfy allowed notification types.
 #
@@ -75,7 +75,7 @@ jellyseerr_cfg_agents_ntfy_token: ''
 #   2048: Issue reopened (issues are reopened).
 #
 # Allow 'request pending approval', 'request declined', 'issue reported':
-# jellyseerr_cfg_agents_gotify_types: 322
+# seerr_cfg_agents_gotify_types: 322
 #
 # Default: 0.
-jellyseerr_cfg_agents_ntfy_types: 0
+seerr_cfg_agents_ntfy_types: 0

@@ -5,7 +5,7 @@
 # Default configuration is deployed successfully.
 #
 # Tests:
-# * Jellyseerr built and running.
+# * Seerr built and running.
 # * Sqlite DB created.
 # * Owner is created.
 # * settings.json implicitly verified when service runs.
@@ -40,12 +40,12 @@ provisioner:
                 lookup("env", "MOLECULE_PROJECT_DIRECTORY") ~
                 "/molecule/cache/v2.7.3.tar.gz"
               }}'
-        jellyseerr_cfg_api_key:
+        seerr_cfg_api_key:
           'NzJhZGFiODMtYjg4OC01Nzc1LWJhZjItODFhOTc1NDVhYjk5'
-        jellyseerr_cfg_build_memory: 1500
-        jellyseerr_srv_owner_password: 'testtest1'
+        seerr_cfg_build_memory: 1500
+        seerr_srv_owner_password: 'testtest1'
 platforms:
-  - name: 'jellyseerr-debian-13-default'
+  - name: 'seerr-debian-13-default'
     image: 'ghcr.io/hifis-net/debian-systemd:13'
     systemd: 'always'
     volumes:
@@ -54,7 +54,7 @@ platforms:
     pre_build_image: true
     published_ports:
       - '5055:5055/tcp'
-  - name: 'jellyseerr-debian-13-user_data'
+  - name: 'seerr-debian-13-user_data'
     image: 'ghcr.io/hifis-net/debian-systemd:13'
     systemd: 'always'
     volumes:

@@ -1,11 +1,11 @@
    "telegram": {
-    "enabled": {{ _jellyseerr_cfg_agents_telegram_enabled.raw | lower }},
-    "types": {{ _jellyseerr_cfg_agents_telegram_types.raw }},
+    "enabled": {{ _seerr_cfg_agents_telegram_enabled.raw | lower }},
+    "types": {{ _seerr_cfg_agents_telegram_types.raw }},
     "options": {
-     "botAPI": "{{ _jellyseerr_cfg_agents_telegram_bot_api.raw }}",
-     "chatId": "{{ _jellyseerr_cfg_agents_telegram_chat_id.raw }}",
-     "messageThreadId": "{{ _jellyseerr_cfg_agents_telegram_chat_id.raw }}",
-     "sendSilently": {{ _jellyseerr_cfg_agents_telegram_send_silently.raw | lower }},
-     "botUsername": "{{ _jellyseerr_cfg_agents_telegram_bot_username.raw }}"
+     "botAPI": "{{ _seerr_cfg_agents_telegram_bot_api.raw }}",
+     "chatId": "{{ _seerr_cfg_agents_telegram_chat_id.raw }}",
+     "messageThreadId": "{{ _seerr_cfg_agents_telegram_chat_id.raw }}",
+     "sendSilently": {{ _seerr_cfg_agents_telegram_send_silently.raw | lower }},
+     "botUsername": "{{ _seerr_cfg_agents_telegram_bot_username.raw }}"
     }
    },

@@ -1,6 +1,6 @@
 ---
 ###############################################################################
-# Jellyseerr User Options
+# Seerr User Options
 ###############################################################################
 
 # Enable local sign-in?
@@ -10,48 +10,48 @@
 # sign in using their email address.
 #
 # When disabled Media server OAuth becomes the only sign-in option, and any
-# local users will not be able to sign in to Jellyseerr.
+# local users will not be able to sign in to Seerr.
 #
 # Default: True.
-jellyseerr_cfg_local_login: true
+seerr_cfg_local_login: true
 
 # Enable media server (Plex) sign-in?
 #
 # Allow users to sign in using their media server OAuth account.
 #
 # When disabled local users become the only sign-in option, and any
-# media server users will not be able to sign in to Jellyseerr.
+# media server users will not be able to sign in to Seerr.
 #
 # Default: True.
-jellyseerr_cfg_media_server_login: true
+seerr_cfg_media_server_login: true
 
 # Enable new media server (Plex) sign-in?
 #
 # Allow Plex users to sign in without first being imported or added.
 #
-# Users with access to your Plex server will be able to sign in to Jellyseerr
+# Users with access to your Plex server will be able to sign in to Seerr
 # even if they have not yet been imported. Users will be automatically assigned
 # the permissions configured in the Default Permissions setting
-# jellyseerr_cfg_default_permissions upon first sign-in.
+# seerr_cfg_default_permissions upon first sign-in.
 #
 # Default: True.
-jellyseerr_cfg_new_plex_login: true
+seerr_cfg_new_plex_login: true
 
 # Global movie request limit (number of requests per period).
 #
 # Default: 0 (unlimited).
-jellyseerr_cfg_default_quotas_movie_quota_limit: 0
+seerr_cfg_default_quotas_movie_quota_limit: 0
 
 # Global movie request limit (period in days). Default: 7 (unlimited).
-jellyseerr_cfg_default_quotas_movie_quota_days: 7
+seerr_cfg_default_quotas_movie_quota_days: 7
 
 # Global series request limit (number of requests per period).
 #
 # Default: 0 (unlimited).
-jellyseerr_cfg_default_quotas_tv_quota_limit: 0
+seerr_cfg_default_quotas_tv_quota_limit: 0
 
 # Global series request limit (period in days). Default: 7 (unlimited).
-jellyseerr_cfg_default_quotas_tv_quota_days: 7
+seerr_cfg_default_quotas_tv_quota_days: 7
 
 # yamllint disable rule:line-length
 # Default Permissions assigned to new users.
@@ -89,11 +89,11 @@ jellyseerr_cfg_default_quotas_tv_quota_days: 7
 #
 # User with 'request' and 'manage issues' permissions:
 #
-#   jellyseerr_cfg_default_permissions: 1048608
+#   seerr_cfg_default_permissions: 1048608
 #
 # Default: 32 (request).
 #
 # Reference:
-# * https://github.com/fallenbagel/jellyseerr/blob/develop/server/lib/permissions.ts
+# * https://github.com/seerr-team/seerr/blob/develop/server/lib/permissions.ts
 # yamllint enable rule:line-length
-jellyseerr_cfg_default_permissions: 32
+seerr_cfg_default_permissions: 32

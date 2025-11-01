@@ -1,9 +1,9 @@
    "webhook": {
-    "enabled": {{ _jellyseerr_cfg_agents_webhook_enabled.raw | lower }},
-    "types": {{ _jellyseerr_cfg_agents_webhook_types.raw }},
+    "enabled": {{ _seerr_cfg_agents_webhook_enabled.raw | lower }},
+    "types": {{ _seerr_cfg_agents_webhook_types.raw }},
     "options": {
-     "webhookUrl": "{{ _jellyseerr_cfg_agents_webhook_webhook_url.raw }}",
-     "authHeader": "{{ _jellyseerr_cfg_agents_webhook_auth_header.raw }}",
-     "jsonPayload": "{{ _jellyseerr_cfg_agents_webhook_json_payload.raw }}"
+     "webhookUrl": "{{ _seerr_cfg_agents_webhook_webhook_url.raw }}",
+     "authHeader": "{{ _seerr_cfg_agents_webhook_auth_header.raw }}",
+     "jsonPayload": "{{ _seerr_cfg_agents_webhook_json_payload.raw }}"
     }
    },

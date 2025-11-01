@@ -1,6 +1,6 @@
 ---
 ###############################################################################
-# Jellyseerr Role Templates
+# Seerr Role Templates
 ###############################################################################
 # Default dictionary templates are used as a base dictionary with user settings
 # merged into them to provide a known good dictionary of settings with defaults
@@ -9,7 +9,7 @@
 # These should only be changed if new values are added to the config.
 
 # Template default values for media server libraries (plex, jellyfin).
-jellyseerr_role_template_media_server_libraries:
+seerr_role_template_media_server_libraries:
   id: 1
   name: ''
   enabled: true
@@ -17,7 +17,7 @@ jellyseerr_role_template_media_server_libraries:
   last_scan: 0
 
 # Template default values for Radarr servers.
-jellyseerr_role_template_radarr:
+seerr_role_template_radarr:
   id: 0
   name: ''
   hostname: ''
@@ -39,7 +39,7 @@ jellyseerr_role_template_radarr:
   minimum_availability: 'released'
 
 # Template default values for Sonarr servers.
-jellyseerr_role_template_sonarr:
+seerr_role_template_sonarr:
   id: 0
   name: ''
   hostname: ''

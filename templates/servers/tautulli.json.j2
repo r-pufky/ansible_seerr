@@ -1,11 +1,11 @@
-{% if _jellyseerr_cfg_tautulli_hostname.raw | length > 0 %}
+{% if _seerr_cfg_tautulli_hostname.raw | length > 0 %}
   "tautulli": {
-   "hostname": "{{ _jellyseerr_cfg_tautulli_hostname.raw }}",
-   "port": {{ _jellyseerr_cfg_tautulli_port.raw }},
-   "useSsl": {{ _jellyseerr_cfg_tautulli_use_ssl.raw }},
-   "urlBase": "{{ _jellyseerr_cfg_tautulli_url_base.raw }}",
-   "apiKey": "{{ _jellyseerr_cfg_tautulli_api_key.raw }}",
-   "externalUrl": "{{ _jellyseerr_cfg_tautulli_external_url.raw }}"
+   "hostname": "{{ _seerr_cfg_tautulli_hostname.raw }}",
+   "port": {{ _seerr_cfg_tautulli_port.raw }},
+   "useSsl": {{ _seerr_cfg_tautulli_use_ssl.raw }},
+   "urlBase": "{{ _seerr_cfg_tautulli_url_base.raw }}",
+   "apiKey": "{{ _seerr_cfg_tautulli_api_key.raw }}",
+   "externalUrl": "{{ _seerr_cfg_tautulli_external_url.raw }}"
   },
 {% else %}
   "tautulli": {},

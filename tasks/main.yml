@@ -9,7 +9,7 @@
   ansible.builtin.include_tasks: 'install.yml'
 
 - name: 'Build'
-  when: not jellyseerr_srv_force_config_only_enable
+  when: not seerr_srv_force_config_only_enable
   ansible.builtin.include_tasks: 'build.yml'
 
 - name: 'Config'

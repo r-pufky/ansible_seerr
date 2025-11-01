@@ -2,7 +2,7 @@
 ###############################################################################
 # Validate
 ###############################################################################
-# Ensure Forgejo services and confirm they are active and running.
+# Ensure Seerr services and confirm they are active and running.
 #
 # Service already started to update local users.
 
@@ -13,6 +13,12 @@
   ansible.builtin.assert:
     quiet: true
     that: ansible_facts.services[item].state == 'running'
-    fail_msg: '✘ {{ item }} should be running.'
+    fail_msg: |
+      ╭───────────────────────────────────────────────────────────────────╮
+      │                                                                   │
+      │                     Service failed to start.                      │
+      │                                                                   │
+      ├───────────────────────────────────────────────────────────────────╯
+      │ {{ item }}
   loop:
-    - 'jellyseerr.service'
+    - 'seerr.service'

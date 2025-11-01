@@ -1,53 +1,53 @@
 ---
 ###############################################################################
-# Jellyseerr Prep
+# Seerr Prep
 ###############################################################################
 #
 # Generates:
-#   _jellyseerr: dict - Role runtime specific config.
+#   _seerr: dict - Role runtime specific config.
 #
 # Reference:
-# * https://jellyseerr.dev/
-# * https://github.com/sct/jellyseerr/
-# * https://docs.jellyseerr.dev/getting-started/installation
+# * https://seerr.dev/
+# * https://github.com/sct/seerr/
+# * https://docs.seerr.dev/getting-started/installation
 
 - name: 'Prep | manage users'
-  when: _jellyseerr_srv_create_user.raw
+  when: _seerr_srv_create_user.raw
   ansible.builtin.include_role:
     name: 'r_pufky.deb.users'
     tasks_from: 'role_account_add.yml'
   vars:
-    users_role_user: '{{ jellyseerr_role_user }}'
-    users_role_group: '{{ jellyseerr_role_group }}'
+    users_role_user: '{{ seerr_role_user }}'
+    users_role_group: '{{ seerr_role_group }}'
 
-- name: 'Prep | enumerate system user {{ _jellyseerr_srv_user.raw }}'
+- name: 'Prep | enumerate system user {{ _seerr_srv_user.raw }}'
   ansible.builtin.user:
-    name: '{{ _jellyseerr_srv_user.raw }}'
+    name: '{{ _seerr_srv_user.raw }}'
   check_mode: true
   changed_when: false
-  register: _jellyseerr_srv_user_query
+  register: _seerr_srv_user_query
 
 - name: 'Prep | parse system user UID/GID'
   ansible.builtin.set_fact:
-    _jellyseerr_srv_user: '{{
-        _jellyseerr_srv_user |
-        combine({"_uid": _jellyseerr_srv_user_query.uid,
-                 "_home": _jellyseerr_srv_user_query.home})
+    _seerr_srv_user: '{{
+        _seerr_srv_user |
+        combine({"_uid": _seerr_srv_user_query.uid,
+                 "_home": _seerr_srv_user_query.home})
       }}'
-    _jellyseerr_srv_group: '{{
-        _jellyseerr_srv_group |
-        combine({"_gid": _jellyseerr_srv_user_query.group})
+    _seerr_srv_group: '{{
+        _seerr_srv_group |
+        combine({"_gid": _seerr_srv_user_query.group})
       }}'
 
 - name: 'Prep | generate config locations'
   ansible.builtin.set_fact:
-    _jellyseerr: {
-      nvm_env: '{{ _jellyseerr_srv_user._home ~ "/nvm.env" }}',
-      nvm_dir: '{{ _jellyseerr_srv_user._home ~ "/.nvm" }}',
-      nvm_sh: '{{ _jellyseerr_srv_user._home ~ "/.nvm/nvm.sh" }}',
-      nvm_cache: '{{ _jellyseerr_srv_user._home ~ "/.cache/node" }}',
+    _seerr: {
+      nvm_env: '{{ _seerr_srv_user._home ~ "/nvm.env" }}',
+      nvm_dir: '{{ _seerr_srv_user._home ~ "/.nvm" }}',
+      nvm_sh: '{{ _seerr_srv_user._home ~ "/.nvm/nvm.sh" }}',
+      nvm_cache: '{{ _seerr_srv_user._home ~ "/.cache/node" }}',
       corepack:
-        '{{ "corepack use pnpm@latest-" ~ jellyseerr__nvm_pnpm_version }}',
+        '{{ "corepack use pnpm@latest-" ~ seerr__nvm_pnpm_version }}',
     }
 
 - name: 'Prep | stop services'
@@ -56,4 +56,4 @@
     state: 'stopped'
   failed_when: false
   loop:
-    - 'jellyseerr.service'
+    - 'seerr.service'

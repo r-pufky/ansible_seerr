@@ -3,10 +3,10 @@
 ###############################################################################
 # Set Owner
 ###############################################################################
-# Jellyseerr must be up and running to ensure DB's are created. Manually add
+# Seerr must be up and running to ensure DB's are created. Manually add
 # owner to DB if required. Confirm owner API access.
 #
-# Use builtin Jellyseerr bcrypt library for generating password hash and inject
+# Use builtin Seerr bcrypt library for generating password hash and inject
 # user with minimum required DB columns.
 #
 # Decision: Only manage owner - REST API does not provide a good way to set
@@ -33,7 +33,7 @@
 # * https://stackoverflow.com/questions/50123855/ansible-uri-module-passing-integer-from-variable
 
 - name: 'Set owner | poll service 🗘'
-  when: _jellyseerr_srv_poll_enable.raw
+  when: _seerr_srv_poll_enable.raw
   ansible.builtin.debug:
     msg: |
       ╭───────────────────────────────────────────────────────────────────╮
@@ -41,15 +41,15 @@
       │               Waiting until port becomes available.               │
       │                                                                   │
       ├───────────────────────────────────────────────────────────────────╯
-      │ Max {{ jellyseerr_role_poll_timeout }} seconds.
+      │ Max {{ seerr_role_poll_timeout }} seconds.
 
 - name: 'Set owner | poll service'
-  when: _jellyseerr_srv_poll_enable.raw
+  when: _seerr_srv_poll_enable.raw
   ansible.builtin.wait_for:
-    port: '{{ _jellyseerr_srv_port.raw }}'
+    port: '{{ _seerr_srv_port.raw }}'
     delay: 5
-    sleep: '{{ jellyseerr_role_poll_interval }}'
-    timeout: '{{ jellyseerr_role_poll_timeout }}'
+    sleep: '{{ seerr_role_poll_interval }}'
+    timeout: '{{ seerr_role_poll_timeout }}'
     msg: |
       ╭───────────────────────────────────────────────────────────────────╮
       │                                                                   │
@@ -59,20 +59,20 @@
 
 - name: 'Set owner'
   block:
-    - name: 'Set owner | update {{ _jellyseerr_srv_owner_email.raw }}'
+    - name: 'Set owner | update {{ _seerr_srv_owner_email.raw }}'
       ansible.builtin.uri:
-        url: '{{ jellyseerr_role_api_base }}/auth/local'
+        url: '{{ seerr_role_api_base }}/auth/local'
         method: 'POST'
         status_code: [200]
         headers:
-          'X-Api-Key': '{{ _jellyseerr_cfg_api_key.raw }}'
+          'X-Api-Key': '{{ _seerr_cfg_api_key.raw }}'
         body:
-          email: '{{ _jellyseerr_srv_owner_email.raw }}'
-          password: '{{ _jellyseerr_srv_owner_password.raw }}'
+          email: '{{ _seerr_srv_owner_email.raw }}'
+          password: '{{ _seerr_srv_owner_password.raw }}'
         body_format: 'json'
-      register: _jellyseerr_api
+      register: _seerr_api
   rescue:
-    - name: 'Set owner | WARNING ⚠'
+    - name: 'Set owner | WARNING ⓘ'
       ansible.builtin.debug:
         msg: |
           ╭───────────────────────────────────────────────────────────────────╮
@@ -84,101 +84,101 @@
 
     - name: 'Set owner | hash password'
       ansible.builtin.shell: >
-          source {{ _jellyseerr.nvm_env }} &&
-          {{ _jellyseerr.corepack }} &&
+          source {{ _seerr.nvm_env }} &&
+          {{ _seerr.corepack }} &&
           node -e "import bcrypt from 'bcrypt';
           const pw =
-          await bcrypt.hash('{{ _jellyseerr_srv_owner_password.raw }}', 12);
+          await bcrypt.hash('{{ _seerr_srv_owner_password.raw }}', 12);
           console.log(pw);"
       args:
         executable: '/bin/bash'
-        chdir: '{{ jellyseerr_role_repo_extract_symlink }}'
+        chdir: '{{ seerr_role_repo_extract_symlink }}'
       changed_when: false
       become: true
-      become_user: '{{ _jellyseerr_srv_user.raw }}'
-      register: _jellyseerr_cmd
+      become_user: '{{ _seerr_srv_user.raw }}'
+      register: _seerr_cmd
       # TODO(role): disabled until future ansible data tagging update.
       # no_log: true  # password.
 
     # TODO(role): disabled until future ansible data tagging update.
     # no_log: true  # password and auth tokens.
-    - name: 'Set owner | add {{ _jellyseerr_srv_owner_email.raw }}'
-      when: _jellyseerr_cfg_db_type.raw == 'sqlite'
+    - name: 'Set owner | add {{ _seerr_srv_owner_email.raw }}'
+      when: _seerr_cfg_db_type.raw == 'sqlite'
       ansible.builtin.include_role:
         name: 'r_pufky.srv.sqlite'
       vars:
         sqlite_sql: >
-          "{{ jellyseerr_role_sqlite_user_insert }} (
+          "{{ seerr_role_sqlite_user_insert }} (
           1,
-          \"{{ _jellyseerr_srv_owner_email.raw }}\",
+          \"{{ _seerr_srv_owner_email.raw }}\",
           2,
-          \"{{ _jellyseerr_srv_owner_avatar.raw }}\",
-          \"{{ _jellyseerr_cmd.stdout_lines[-1] }}\",
+          \"{{ _seerr_srv_owner_avatar.raw }}\",
+          \"{{ _seerr_cmd.stdout_lines[-1] }}\",
           2
           )"
-        sqlite_db: '{{ jellyseerr_role_sqlite_db }}'
+        sqlite_db: '{{ seerr_role_sqlite_db }}'
         sqlite_quote: false
         sqlite_become: true
-        sqlite_become_user: '{{ _jellyseerr_srv_user.raw }}'
+        sqlite_become_user: '{{ _seerr_srv_user.raw }}'
 
     # TODO(role): disabled until future ansible data tagging update.
     # no_log: true  # password and auth tokens.
-    - name: 'Set owner | add {{ _jellyseerr_srv_owner_email.raw }}'
-      when: _jellyseerr_cfg_db_type.raw == 'postgres'
+    - name: 'Set owner | add {{ _seerr_srv_owner_email.raw }}'
+      when: _seerr_cfg_db_type.raw == 'postgres'
       community.postgresql.postgresql_query:
-        ca_cert: '{{ _jellyseerr_cfg_db_ssl_ca_file._dest }}'
-        login_db: '{{ _jellyseerr_cfg_db_name.raw }}'
+        ca_cert: '{{ _seerr_cfg_db_ssl_ca_file._dest }}'
+        login_db: '{{ _seerr_cfg_db_name.raw }}'
         login_host: '{{
-            _jellyseerr_cfg_db_host.raw
-            if _jellyseerr_cfg_db_host.raw | length > 0 else
+            _seerr_cfg_db_host.raw
+            if _seerr_cfg_db_host.raw | length > 0 else
             omit
           }}'
-        login_password: '{{ _jellyseerr_cfg_db_pass.raw }}'
+        login_password: '{{ _seerr_cfg_db_pass.raw }}'
         login_unix_socket: '{{
-            jellyseerr_cfg_db_socket_path.raw
-            if _jellyseerr_cfg_db_host.raw | length == 0 else
+            seerr_cfg_db_socket_path.raw
+            if _seerr_cfg_db_host.raw | length == 0 else
             omit
           }}'
-        login_user: '{{ _jellyseerr_cfg_db_user.raw }}'
+        login_user: '{{ _seerr_cfg_db_user.raw }}'
         port: '{{
-            _jellyseerr_cfg_db_port.raw
-            if _jellyseerr_cfg_db_host.raw | length > 0 else
+            _seerr_cfg_db_port.raw
+            if _seerr_cfg_db_host.raw | length > 0 else
             omit
           }}'
         ssl_mode: 'prefer'
         query: >
-          {{ jellyseerr_role_pg_user_insert }} (
+          {{ seerr_role_pg_user_insert }} (
           1,
-          '{{ _jellyseerr_srv_owner_email.raw }}',
+          '{{ _seerr_srv_owner_email.raw }}',
           2,
-          '{{ _jellyseerr_srv_owner_avatar.raw }}',
-          '{{ _jellyseerr_cmd.stdout_lines[-1] }}',
+          '{{ _seerr_srv_owner_avatar.raw }}',
+          '{{ _seerr_cmd.stdout_lines[-1] }}',
           2
           )
           ON CONFLICT (id) DO UPDATE SET
-          email='{{ _jellyseerr_srv_owner_email.raw }}',
+          email='{{ _seerr_srv_owner_email.raw }}',
           permissions=2,
-          avatar='{{ _jellyseerr_srv_owner_avatar.raw }}',
-          password='{{ _jellyseerr_cmd.stdout_lines[-1] }}',
+          avatar='{{ _seerr_srv_owner_avatar.raw }}',
+          password='{{ _seerr_cmd.stdout_lines[-1] }}',
           "userType"=2
           WHERE "user".id=1;
 
-    - name: 'Set owner | update {{ _jellyseerr_srv_owner_email.raw }}'
+    - name: 'Set owner | update {{ _seerr_srv_owner_email.raw }}'
       ansible.builtin.uri:
-        url: '{{ jellyseerr_role_api_base }}/auth/local'
+        url: '{{ seerr_role_api_base }}/auth/local'
         method: 'POST'
         status_code: [200]
         headers:
-          'X-Api-Key': '{{ _jellyseerr_cfg_api_key.raw }}'
+          'X-Api-Key': '{{ _seerr_cfg_api_key.raw }}'
         body:
-          email: '{{ _jellyseerr_srv_owner_email.raw }}'
-          password: '{{ _jellyseerr_srv_owner_password.raw }}'
+          email: '{{ _seerr_srv_owner_email.raw }}'
+          password: '{{ _seerr_srv_owner_password.raw }}'
         body_format: 'json'
       failed_when: false
-      register: _jellyseerr_api
+      register: _seerr_api
 
     - name: 'Set owner | SUCCESS ✔'
-      when: _jellyseerr_api.status == 200
+      when: _seerr_api.status == 200
       ansible.builtin.debug:
         msg: |
           ╭───────────────────────────────────────────────────────────────────╮
@@ -188,7 +188,7 @@
           ╰───────────────────────────────────────────────────────────────────╯
 
     - name: 'Set owner | FAILURE ✘'
-      when: _jellyseerr_api.status != 200
+      when: _seerr_api.status != 200
       ansible.builtin.fail:
         msg: |
           ╭───────────────────────────────────────────────────────────────────╮
@@ -196,4 +196,7 @@
           │                       Failed to add owner.                        │
           │                                                                   │
           ├───────────────────────────────────────────────────────────────────╯
-          │ Set jellyseerr_cfg_owner_*.
+          │ seerr_srv_owner_email: '{{ seerr_srv_owner_email }}'
+          │ seerr_srv_owner_username: '{{ seerr_srv_owner_username }}'
+          │ seerr_srv_owner_password: '{{ seerr_srv_owner_password }}'
+          │ seerr_srv_owner_avatar: '{{ seerr_srv_owner_avatar }}'

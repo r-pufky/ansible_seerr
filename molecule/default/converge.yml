@@ -3,6 +3,6 @@
   hosts: 'all'
   gather_facts: true  # ansible_facts for memory sizing.
   tasks:
-    - name: 'Converge | apply r_pufky.srv.jellyseerr'
+    - name: 'Converge | apply r_pufky.arr.seerr'
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.jellyseerr'
+        name: 'r_pufky.arr.seerr'

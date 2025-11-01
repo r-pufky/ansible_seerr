@@ -1,11 +1,11 @@
  "plex": {
-  "name": "{{ _jellyseerr_cfg_plex_name.raw }}",
-  "ip": "{{ _jellyseerr_cfg_plex_ip.raw }}",
-  "port": {{ _jellyseerr_cfg_plex_port.raw }},
-  "useSsl": {{ _jellyseerr_cfg_plex_use_ssl.raw | lower }},
-{% if _jellyseerr_cfg_plex_libraries.data | length > 0 %}
+  "name": "{{ _seerr_cfg_plex_name.raw }}",
+  "ip": "{{ _seerr_cfg_plex_ip.raw }}",
+  "port": {{ _seerr_cfg_plex_port.raw }},
+  "useSsl": {{ _seerr_cfg_plex_use_ssl.raw | lower }},
+{% if _seerr_cfg_plex_libraries.data | length > 0 %}
   "libraries": [
-{%   for library in _jellyseerr_cfg_plex_libraries.data %}
+{%   for library in _seerr_cfg_plex_libraries.data %}
     {
      "id": {{ library.id }},
      "name": "{{ library.name }}",
@@ -18,6 +18,6 @@
 {% else %}
   "libraries": [],
 {% endif %}
-  "webAppUrl": "{{ _jellyseerr_cfg_plex_web_app_url.raw }}",
-  "machineId": "{{ _jellyseerr_cfg_plex_machine_id.raw }}"
+  "webAppUrl": "{{ _seerr_cfg_plex_web_app_url.raw }}",
+  "machineId": "{{ _seerr_cfg_plex_machine_id.raw }}"
  },

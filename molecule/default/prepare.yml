@@ -23,7 +23,7 @@
         test_name: '{{ "Prepare | cache " ~ test_version }}'
         test_dest: '{{ "v" ~ test_version ~ ".tar.gz" }}'
         test_url: '{{
-            "https://github.com/fallenbagel/jellyseerr/archive/refs/tags/" ~
+            "https://github.com/seerr-team/seerr/archive/refs/tags/" ~
             "v" ~ test_version ~ ".tar.gz"
           }}'
         test_mode: '0640'

@@ -6,13 +6,13 @@
 # * https://gotify.net/docs/
 
 # Enable notifications? Default: False.
-jellyseerr_cfg_agents_gotify_enabled: false
+seerr_cfg_agents_gotify_enabled: false
 
 # Server URL. Default: ''.
-jellyseerr_cfg_agents_gotify_url: ''
+seerr_cfg_agents_gotify_url: ''
 
 # Application token. Default: ''.
-jellyseerr_cfg_agents_gotify_token: ''
+seerr_cfg_agents_gotify_token: ''
 
 # Notification priority.
 #
@@ -22,7 +22,7 @@ jellyseerr_cfg_agents_gotify_token: ''
 #   10: Highest message priority.
 #
 # Default: 0 (test message).
-jellyseerr_cfg_agents_gotify_priority: 0
+seerr_cfg_agents_gotify_priority: 0
 
 # Allowed notification types.
 #
@@ -45,7 +45,7 @@ jellyseerr_cfg_agents_gotify_priority: 0
 #   2048: Issue reopened (issues are reopened).
 #
 # Allow 'request pending approval', 'request declined', 'issue reported':
-# jellyseerr_cfg_agents_gotify_types: 322
+# seerr_cfg_agents_gotify_types: 322
 #
 # Default: 0.
-jellyseerr_cfg_agents_gotify_types: 0
+seerr_cfg_agents_gotify_types: 0

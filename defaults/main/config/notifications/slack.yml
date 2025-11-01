@@ -9,7 +9,7 @@
 # * https://api.slack.com/messaging/webhooks
 
 # Enable notifications? Default: False.
-jellyseerr_cfg_agents_slack_enabled: false
+seerr_cfg_agents_slack_enabled: false
 
 # Webhook URL.
 #
@@ -19,7 +19,7 @@ jellyseerr_cfg_agents_slack_enabled: false
 #
 # Reference:
 # * https://my.slack.com/services/new/incoming-webhook
-jellyseerr_cfg_agents_slack_webhook_url: ''
+seerr_cfg_agents_slack_webhook_url: ''
 
 # Allowed notification types.
 #
@@ -42,7 +42,7 @@ jellyseerr_cfg_agents_slack_webhook_url: ''
 #   2048: Issue reopened (issues are reopened).
 #
 # Allow 'request pending approval', 'request declined', 'issue reported':
-# jellyseerr_cfg_agents_slack_types: 322
+# seerr_cfg_agents_slack_types: 322
 #
 # Default: 0.
-jellyseerr_cfg_agents_slack_types: 0
+seerr_cfg_agents_slack_types: 0

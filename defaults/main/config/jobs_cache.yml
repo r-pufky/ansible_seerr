@@ -3,43 +3,43 @@
 # Settings > Jobs & Cache (settings.json > jobs)
 ###############################################################################
 # Documented usage here reflect code, installer, and WebUI analysis. HIGHLY
-# recommend to configure Jellyseerr in the WebUI and migrate settings here.
+# recommend to configure Seerr in the WebUI and migrate settings here.
 
 # Plex recently added scan cronjob interval. Default: '0 */5 * * * *'.
-jellyseerr_cfg_jobs_plex_recently_added_scan: '0 */5 * * * *'
+seerr_cfg_jobs_plex_recently_added_scan: '0 */5 * * * *'
 
 # Plex full library scan cronjob interval. Default: '0 0 3 * * *'.
-jellyseerr_cfg_jobs_plex_full_scan: '0 0 3 * * *'
+seerr_cfg_jobs_plex_full_scan: '0 0 3 * * *'
 
 # Plex watchlist sync cronjob interval. Default: '0 */3 * * * *'.
-jellyseerr_cfg_jobs_plex_watchlist_sync: '0 */3 * * * *'
+seerr_cfg_jobs_plex_watchlist_sync: '0 */3 * * * *'
 
 # Plex refresh auth token cronjob interval. Default: '0 0 5 * * *'.
-jellyseerr_cfg_jobs_plex_refresh_token: '0 0 5 * * *'
+seerr_cfg_jobs_plex_refresh_token: '0 0 5 * * *'
 
 # Radarr scan cronjob interval. Default: '0 0 4 * * *'.
-jellyseerr_cfg_jobs_radarr_scan: '0 0 4 * * *'
+seerr_cfg_jobs_radarr_scan: '0 0 4 * * *'
 
 # Sonarr scan cronjob interval. Default: '0 30 4 * * *'.
-jellyseerr_cfg_jobs_sonarr_scan: '0 30 4 * * *'
+seerr_cfg_jobs_sonarr_scan: '0 30 4 * * *'
 
 # Media availability sync cronjob interval. Default: '0 0 5 * * *'.
-jellyseerr_cfg_jobs_availability_sync: '0 0 5 * * *'
+seerr_cfg_jobs_availability_sync: '0 0 5 * * *'
 
 # Download sync cronjob interval. Default: '0 * * * * *'.
-jellyseerr_cfg_jobs_download_sync: '0 * * * * *'
+seerr_cfg_jobs_download_sync: '0 * * * * *'
 
 # Download sync reset cronjob interval. Default: '0 0 1 * * *'.
-jellyseerr_cfg_jobs_download_sync_reset: '0 0 1 * * *'
+seerr_cfg_jobs_download_sync_reset: '0 0 1 * * *'
 
 # Download sync reset cronjob interval. Default: '0 0/5 * * * *'.
-jellyseerr_cfg_jobs_jellyfin_recently_added_scan: '0 0/5 * * * *'
+seerr_cfg_jobs_jellyfin_recently_added_scan: '0 0/5 * * * *'
 
 # Download sync reset cronjob interval. Default: '0 0 3 * * *'.
-jellyseerr_cfg_jobs_jellyfin_full_scan: '0 0 3 * * *'
+seerr_cfg_jobs_jellyfin_full_scan: '0 0 3 * * *'
 
 # Image cache cleanup cronjob interval. Default: '0 0 5 * * *'.
-jellyseerr_cfg_jobs_image_cache_cleanup: '0 0 5 * * *'
+seerr_cfg_jobs_image_cache_cleanup: '0 0 5 * * *'
 
 # Image cache cleanup cronjob interval. Default: '0 30 1 */7 * *'.
-jellyseerr_cfg_jobs_process_blacklisted_tags: '0 30 1 */7 * *'
+seerr_cfg_jobs_process_blacklisted_tags: '0 30 1 */7 * *'

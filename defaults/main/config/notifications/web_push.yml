@@ -3,16 +3,16 @@
 # Settings > Notifications > Webpush (settings.json > webpush)
 ###############################################################################
 # The web push notification agent enables you and your users to receive
-# Jellyseerr notifications in a supported browser.
+# Seerr notifications in a supported browser.
 #
-# Requires: jellyseerr_cfg_trust_proxy=true|jellyseerr_cfg_proxy_enabled=true.
+# Requires: seerr_cfg_trust_proxy=true|seerr_cfg_proxy_enabled=true.
 #
 # This notification agent does not require any configuration, but is not
-# enabled in Jellyseerr by default.
+# enabled in Seerr by default.
 #
 # The web push agent only works via HTTPS. Refer to our reverse proxy examples
-# for help on proxy Jellyseerr traffic via HTTPS.
+# for help on proxy Seerr traffic via HTTPS.
 #
 # Reference:
-# * https://docs.jellyseerr.dev/using-jellyseerr/notifications/webpush
-jellyseerr_cfg_agents_webpush_enabled: false
+# * https://docs.seerr.dev/using-seerr/notifications/webpush
+seerr_cfg_agents_webpush_enabled: false

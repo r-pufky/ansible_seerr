@@ -3,30 +3,30 @@
 # Settings > Media server > Tautulli (settings.json > tautulli)
 ###############################################################################
 # Documented usage here reflect code, installer, and WebUI analysis. HIGHLY
-# recommend to configure Jellyseerr in the WebUI and migrate settings here.
+# recommend to configure Seerr in the WebUI and migrate settings here.
 
 # Tautulli hostname or ip address.
 #
 # Disabling hostname will disable tautulli.
 #
 # Default: '' (disable tautulli).
-jellyseerr_cfg_tautulli_hostname: ''
+seerr_cfg_tautulli_hostname: ''
 
 # Tautulli port. Default: 8181.
-jellyseerr_cfg_tautulli_port: 8181
+seerr_cfg_tautulli_port: 8181
 
 # Use SSL with tautulli? Default: False.
-jellyseerr_cfg_tautulli_use_ssl: false
+seerr_cfg_tautulli_use_ssl: false
 
 # Base URL path to access Tautulli.
 #
 # Requires leading '/'.
 #
 # Default: ''.
-jellyseerr_cfg_tautulli_url_base: ''
+seerr_cfg_tautulli_url_base: ''
 
 # Tautulli API key. Default: ''.
-jellyseerr_cfg_tautulli_api_key: ''
+seerr_cfg_tautulli_api_key: ''
 
 # Tautulli external URL. Default: ''.
-jellyseerr_cfg_tautulli_external_url: ''
+seerr_cfg_tautulli_external_url: ''

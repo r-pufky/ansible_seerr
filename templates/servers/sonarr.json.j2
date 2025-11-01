@@ -1,6 +1,6 @@
-{% if _jellyseerr_cfg_sonarr.data | length > 0 %}
+{% if _seerr_cfg_sonarr.data | length > 0 %}
   "sonarr": [
-{%   for server in _jellyseerr_cfg_sonarr.data %}
+{%   for server in _seerr_cfg_sonarr.data %}
    {
     "id": {{ server.id }},
     "name": "{{ server.name }}",

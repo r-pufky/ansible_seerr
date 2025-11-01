@@ -9,18 +9,18 @@
 #
 # If you keep separate copies of non-4K and 4K media in your libraries, you
 # will need to set up multiple sonarr instances and link each of them to
-# jellyseerr.
+# seerr.
 #
-# Jellyseerr checks these linked servers to determine whether or not media has
+# Seerr checks these linked servers to determine whether or not media has
 # already been requested or is available, so two servers of each type are
 # required if you keep separate non-4K and 4K copies of media.
 #
 # If you only maintain one copy of media, you can instead simply set up one
 # server and set the 'Quality Profile' setting on a per-request basis.
 #
-# jellyseerr_cfg_sonarr:
+# seerr_cfg_sonarr:
 #     list of dict - Sonarr servers to use.
-#   - id: int - Jellyseerr radarr server order.
+#   - id: int - Seerr radarr server order.
 #         Default: 0.
 #     name: str - Server name.
 #     hostname: str - Server IP or DNS address.
@@ -79,12 +79,12 @@
 #     enable_season_folders: bool - Use season folders.
 #         Default: True.
 #
-# jellyseerr_cfg_sonarr:
+# seerr_cfg_sonarr:
 #   - id: 0
 #     name: 'sonarr'
 #     hostname: '127.0.0.1'
 #     port: 8989
-#     api_key: '{{ vault_jellyseerr_cfg_sonarr_api_key }}'
+#     api_key: '{{ vault_seerr_cfg_sonarr_api_key }}'
 #     use_ssl: false
 #     base_url: ''
 #     active_profile_id: 1
@@ -117,5 +117,5 @@
 # Default: [] (disabled).
 #
 # Reference:
-# * https://docs.jellyseerr.dev/using-jellyseerr/settings/services
-jellyseerr_cfg_sonarr: []
+# * https://docs.seerr.dev/using-seerr/settings/services
+seerr_cfg_sonarr: []

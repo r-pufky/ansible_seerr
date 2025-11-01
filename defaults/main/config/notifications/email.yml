@@ -2,20 +2,20 @@
 ###############################################################################
 # Settings > Notifications > Email (settings.json > email)
 ###############################################################################
-# If jellyseerr_main_application_url=true Jellyseerr will explicitly set the
+# If seerr_main_application_url=true Seerr will explicitly set the
 # origin server hostname when connecting to the SMTP host.
 #
 # Reference:
-# * https://docs.jellyseerr.dev/using-jellyseerr/notifications/email
+# * https://docs.seerr.dev/using-seerr/notifications/email
 
 # Enable notifications? Default: False.
-jellyseerr_cfg_agents_email_enabled: false
+seerr_cfg_agents_email_enabled: false
 
 # Require user email? Default: False.
-jellyseerr_cfg_agents_email_user_email_required: false
+seerr_cfg_agents_email_user_email_required: false
 
-# Sender name. Default: 'Jellyseerr'.
-jellyseerr_cfg_agents_email_sender_name: 'Jellyseerr'
+# Sender name. Default: 'Seerr'.
+seerr_cfg_agents_email_sender_name: 'Seerr'
 
 # Sender address.
 #
@@ -23,10 +23,10 @@ jellyseerr_cfg_agents_email_sender_name: 'Jellyseerr'
 # Gmail requires this to be your actual email address.
 #
 # Default: ''.
-jellyseerr_cfg_agents_email_email_from: ''
+seerr_cfg_agents_email_email_from: ''
 
 # SMTP host IP or hostname of your server. Default: ''.
-jellyseerr_cfg_agents_email_smtp_host: ''
+seerr_cfg_agents_email_smtp_host: ''
 
 # SMTP port.
 #
@@ -36,7 +36,7 @@ jellyseerr_cfg_agents_email_smtp_host: ''
 #     *: Custom port.
 #
 # Default: 587.
-jellyseerr_cfg_agents_email_smtp_port: 587
+seerr_cfg_agents_email_smtp_port: 587
 
 # Encryption Method.
 #
@@ -44,29 +44,29 @@ jellyseerr_cfg_agents_email_smtp_port: 587
 # Highly recommend using STARTTLS or Implicit TLS if email is enabled.
 #
 # Values:
-#                        None: jellyseerr_cfg_agents_email_secure: false
-#                              jellyseerr_cfg_agents_email_ignore_tls: true
-#                              jellyseerr_cfg_agents_email_require_tls: false
-#   Use STARTTLS if available: jellyseerr_cfg_agents_email_secure: false
-#                              jellyseerr_cfg_agents_email_ignore_tls: false
-#                              jellyseerr_cfg_agents_email_require_tls: false
-#         Always use STARTTLS: jellyseerr_cfg_agents_email_secure: false
-#                              jellyseerr_cfg_agents_email_ignore_tls: false
-#                              jellyseerr_cfg_agents_email_require_tls: true
-#            Use Implicit TLS: jellyseerr_cfg_agents_email_secure: true
-#                              jellyseerr_cfg_agents_email_ignore_tls: false
-#                              jellyseerr_cfg_agents_email_require_tls: false
+#                        None: seerr_cfg_agents_email_secure: false
+#                              seerr_cfg_agents_email_ignore_tls: true
+#                              seerr_cfg_agents_email_require_tls: false
+#   Use STARTTLS if available: seerr_cfg_agents_email_secure: false
+#                              seerr_cfg_agents_email_ignore_tls: false
+#                              seerr_cfg_agents_email_require_tls: false
+#         Always use STARTTLS: seerr_cfg_agents_email_secure: false
+#                              seerr_cfg_agents_email_ignore_tls: false
+#                              seerr_cfg_agents_email_require_tls: true
+#            Use Implicit TLS: seerr_cfg_agents_email_secure: true
+#                              seerr_cfg_agents_email_ignore_tls: false
+#                              seerr_cfg_agents_email_require_tls: false
 #
 # Default: False, False, False (use STARTTLS if available).
-jellyseerr_cfg_agents_email_secure: false
-jellyseerr_cfg_agents_email_ignore_tls: false
-jellyseerr_cfg_agents_email_require_tls: false
+seerr_cfg_agents_email_secure: false
+seerr_cfg_agents_email_ignore_tls: false
+seerr_cfg_agents_email_require_tls: false
 
 # Allow self-signed certificates? Default: False.
-jellyseerr_cfg_agents_email_allow_self_signed: false
+seerr_cfg_agents_email_allow_self_signed: false
 
 # SMTP username. Default: ''.
-jellyseerr_cfg_agents_email_auth_user: ''
+seerr_cfg_agents_email_auth_user: ''
 
 # SMTP password.
 #
@@ -76,7 +76,7 @@ jellyseerr_cfg_agents_email_auth_user: ''
 # Set to a static value for redeployment.
 #
 # Default: '{RANDOM}' (randomly generated).
-jellyseerr_cfg_agents_email_auth_pass: '{{
+seerr_cfg_agents_email_auth_pass: '{{
     lookup("ansible.builtin.password",
            "/dev/null",
            chars=["ascii_lowercase", "ascii_uppercase", "digits"],
@@ -94,7 +94,7 @@ jellyseerr_cfg_agents_email_auth_pass: '{{
 # When configuring the PGP keys be sure to keep the entire contents of the key
 # intact and use block.
 #
-# jellyseerr_cfg_agents_email_pgp_private_key:
+# seerr_cfg_agents_email_pgp_private_key:
 #   -----BEGIN PGP PRIVATE KEY BLOCK-----
 #   lFgEXEcE6RYJKwYBBAHaRw8BAQdArjWwk3FAqyiFbFBKT4TzXcVBqPTB3gmzlC/U
 #   ...
@@ -105,14 +105,14 @@ jellyseerr_cfg_agents_email_auth_pass: '{{
 #
 # Reference:
 # * https://www.ietf.org/archive/id/draft-bre-openpgp-samples-01.html
-jellyseerr_cfg_agents_email_pgp_private_key: ''
+seerr_cfg_agents_email_pgp_private_key: ''
 
 # PGP password used to sign encrypted email messages.
 #
 # Set to a static value for redeployment.
 #
 # Default: '{RANDOM}' (randomly generated).
-jellyseerr_cfg_agents_email_pgp_password: '{{
+seerr_cfg_agents_email_pgp_password: '{{
     lookup("ansible.builtin.password",
            "/dev/null",
            chars=["ascii_lowercase", "ascii_uppercase", "digits"],
