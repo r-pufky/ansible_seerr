@@ -20,6 +20,15 @@ All ports and protocols have been defined for the role.
 **STOP.**
 
 WARNING
+> Jellyseerr & Overseerr are now officially merging together.
+>
+> Upstream repositories **will** change: https://github.com/seerr-team/seerr
+> Role repository migration to: https://github.com/r-pufky/seerr
+> Action Required:
+> Role name WILL change to r_pufky.arr.seerr during collection
+> migration. Be sure to update the collection and role.
+
+WARNING
 > Migrations from Overseerr in practice require manual intervention.
 >
 > ALWAYS backup databases and data (or make a snapshot) before

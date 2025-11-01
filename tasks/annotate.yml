@@ -24,6 +24,23 @@
 # * https://forgejo.org/docs/latest/admin/installation-binary
 # * https://forgejo.org/docs/latest/admin/config-cheat-sheet
 
+- name: 'Annotate | UPSTREAM REPO MERGE WARNING ⓘ'
+  ansible.builtin.debug:
+    msg: |
+      ╭───────────────────────────────────────────────────────────────────╮
+      │                                                                   │
+      │                      Jellyseer is now Seerr.                      │
+      │                                                                   │
+      ├───────────────────────────────────────────────────────────────────╯
+      │ Jellyseerr and Overseerr are being merged into Seerr.
+      │
+      │ New repository migration to: https://github.com/seerr-team/seerr
+      │ Role repository migration to: https://github.com/r-pufky/seerr
+      │
+      │ Action Required:
+      │   Role name WILL change to r_pufky.arr.seerr during collection
+      │   migration. Be sure to update collection and role name.
+
 - name: 'Annotate | sanitize & annotate service defaults'
   ansible.builtin.set_fact:  # noqa jinja[spacing] readability.
     _jellyseerr_srv_version: "{{ {} | r_pufky.data.v3(
@@ -1591,7 +1608,7 @@
       }}"
 
 - name: 'Annotate | merge template jellyseerr_cfg_plex_libraries'
-  ansible.builtin.set_fact:  # noqa jinja[spacing] more readable.
+  ansible.builtin.set_fact:  # noqa jinja[spacing] readability.
     _jellyseerr_cfg_plex_libraries: '{{
         _jellyseerr_cfg_plex_libraries |
         combine({
@@ -1604,7 +1621,7 @@
     label: '{{ item.name }}'
 
 - name: 'Annotate | merge template jellyseerr_cfg_jellyfin_libraries'
-  ansible.builtin.set_fact:  # noqa jinja[spacing] more readable.
+  ansible.builtin.set_fact:  # noqa jinja[spacing] readability.
     _jellyseerr_cfg_jellyfin_libraries: '{{
         _jellyseerr_cfg_jellyfin_libraries |
         combine({
@@ -1617,7 +1634,7 @@
     label: '{{ item.name }}'
 
 - name: 'Annotate | merge template jellyseerr_cfg_radarr'
-  ansible.builtin.set_fact:  # noqa jinja[spacing] more readable.
+  ansible.builtin.set_fact:  # noqa jinja[spacing] readability.
     _jellyseerr_cfg_radarr: '{{
         _jellyseerr_cfg_radarr |
         combine({
@@ -1630,7 +1647,7 @@
     label: '{{ item.name }}'
 
 - name: 'Annotate | merge template jellyseerr_cfg_sonarr'
-  ansible.builtin.set_fact:  # noqa jinja[spacing] more readable.
+  ansible.builtin.set_fact:  # noqa jinja[spacing] readability.
     _jellyseerr_cfg_sonarr: '{{
         _jellyseerr_cfg_sonarr |
         combine({

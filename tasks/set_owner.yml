@@ -177,6 +177,16 @@
       failed_when: false
       register: _jellyseerr_api
 
+    - name: 'Set owner | SUCCESS ✔'
+      when: _jellyseerr_api.status == 200
+      ansible.builtin.debug:
+        msg: |
+          ╭───────────────────────────────────────────────────────────────────╮
+          │                                                                   │
+          │                     Owner successfully added.                     │
+          │                                                                   │
+          ╰───────────────────────────────────────────────────────────────────╯
+
     - name: 'Set owner | FAILURE ✘'
       when: _jellyseerr_api.status != 200
       ansible.builtin.fail:

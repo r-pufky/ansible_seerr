@@ -11,13 +11,19 @@
       vars:
         test_name: 'Prepare | create cache'
 
-    - name: 'Prepare | check 2.7.3'
+    - name: 'Prepare | parse test version'
+      ansible.builtin.set_fact:
+        test_version: '2.7.3'
+
+    - name: '{{ "Prepare | cache " ~ test_version }}'
       ansible.builtin.include_role:
         name: 'r_pufky.lib.tests'
         tasks_from: 'cache_url.yml'
       vars:
-        test_name: 'Prepare | cache 2.7.3'
-        test_dest: 'v2.7.3.tar.gz'
-        test_url:
-          'https://github.com/fallenbagel/jellyseerr/archive/refs/tags/v2.7.3.tar.gz'
+        test_name: '{{ "Prepare | cache " ~ test_version }}'
+        test_dest: '{{ "v" ~ test_version ~ ".tar.gz" }}'
+        test_url: '{{
+            "https://github.com/fallenbagel/jellyseerr/archive/refs/tags/" ~
+            "v" ~ test_version ~ ".tar.gz"
+          }}'
         test_mode: '0640'

@@ -18,5 +18,7 @@ galaxy_info:
     - 'media'
     - 'discovery'
     - 'plex'
+    - 'seerr'
+    - 'arr'
 
 dependencies: []

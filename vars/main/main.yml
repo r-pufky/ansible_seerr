@@ -2,26 +2,29 @@
 ###############################################################################
 # Jellyseerr Role Options
 ###############################################################################
+# TODO(role): Jellyseerr and Overseerr are currently merging together into a
+#     unified repository. Migrate to r_pufky.arr with 'seerr' role name, then
+#     update upstream repository (ansible_jellyseerr) as well as source repos.
+#
 # Updates:
-# * New MAJOR, MINOR releases should hard branch at version before starting
-#   (e.g. 10.0.x branch). Only use LTS releases.
-# * Keep a separate change log as changes are made, you will not remember all
-#   of them.
+# * Branch for new Debian releases.
+# * KEEP a separate change log as changes are made.
 # * Use bare-metal docs to validate package/process changes.
 # * Update role defaults (includes updating defaults, tasks):
-#   * Use defaults/ to remove any changed/deprecated variables.
+#   * Use configuration docs to add new variables.
+#   * Use defaults to remove any changed/deprecated variables.
 #   * Hidden variables may be discovered after running the service and shutting
 #     down and checking settings.json for differences.
 #   * Diff release documentation for new variable exposure.
 # * Update tests for any changes.
-# * Standard role validation testing (yamllint, ansible-lint, todo, noqa).
-# * Tag with MAJOR.MINOR version, with PATCH representing role change - e.g.
-#   Jellyseerr: 2.7.3 -> Role: 2.7.301  (01 role release).
+#   * Use BARE VERSION for find and replace to set new version.
+# * Standard role validation testing (yamllint, ansible-lint, to-do, no-qa).
+# * Tag with OS-APP-ROLE version.
 #
 # Reference:
 # * https://jellyseerr.dev/
 # * https://docs.jellyseerr.dev/
-# * https://github.com/fallenbagel/jellyseerr
+# * https://github.com/seerr-team/seerr
 
 # Last time Jellyseerr options were validated against a default configuration.
 jellyseerr_role_validate_date: '2025-08-24'
