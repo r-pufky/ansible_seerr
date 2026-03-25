@@ -1,0 +1,18 @@
+---
+###############################################################################
+# Maintenance
+###############################################################################
+# Prune any old files from previous role versions. This is executed before any
+# operations with the new role version.
+#
+# Use shell command to increase execution speed for multiple directories.
+
+# * Seerr moved to /opt/seerr/src.
+# * seerr.conf ➔ /var/opt/seerr/config/.env.
+- name: 'Maintenance | 6.0.0 | remove old versions'
+  ansible.builtin.shell: >-
+    rm -rf /opt/seerr/seerr* &&
+    rm -rf /etc/seerr
+  args:
+    executable: '/bin/bash'
+    removes: '/etc/seerr'

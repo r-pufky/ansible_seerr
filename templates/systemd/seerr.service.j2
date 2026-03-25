@@ -1,0 +1,18 @@
+[Unit]
+Description=Seerr Daemon.
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+ExecStart={{ seerr__cfg._node }} dist/index.js
+WorkingDirectory={{ seerr__cfg._app }}
+Environment="NODE_ENV=production"
+Environment="CONFIG_DIRECTORY={{ seerr___app._env | dirname }}"
+EnvironmentFile={{ seerr___app._env }}
+User={{ seerr__srv._user }}
+Group={{ seerr__srv._group }}
+Restart=always
+UMask=0002
+
+[Install]
+WantedBy=multi-user.target

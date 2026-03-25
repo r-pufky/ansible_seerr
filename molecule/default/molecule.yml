@@ -5,11 +5,12 @@
 # Default configuration is deployed successfully.
 #
 # Tests:
-# * Seerr built and running.
-# * Sqlite DB created.
-# * Owner is created.
-# * settings.json implicitly verified when service runs.
-# * permissions propagated to all user data directories.
+# * files/default/.env set.
+# * seerr.service active and running.
+# * Standard role run with auto generation (during prep).
+# * Standard role run with injected .env.
+# * Backup created.
+# * Restore applied.
 
 dependency:
   name: 'galaxy'
@@ -26,26 +27,11 @@ provisioner:
   inventory:
     group_vars:
       all:
-        repo_testing_enable: true
-        repo_testing_versions:
-          - comment: 'default'
-            version: 'v2.7.3'
-            asset: '{{
-                lookup("env", "MOLECULE_PROJECT_DIRECTORY") ~
-                "/molecule/cache/v2.7.3.tar.gz"
-              }}'
-          - comment: 'no build'
-            version: 'v2.7.3'
-            asset: '{{
-                lookup("env", "MOLECULE_PROJECT_DIRECTORY") ~
-                "/molecule/cache/v2.7.3.tar.gz"
-              }}'
-        seerr_cfg_api_key:
-          'NzJhZGFiODMtYjg4OC01Nzc1LWJhZjItODFhOTc1NDVhYjk5'
-        seerr_cfg_build_memory: 1500
-        seerr_srv_owner_password: 'testtest1'
+        url_inject_enable: true
+        seerr_cfg_backup_dir: '/tmp/ansible_seerr_test'
+        seerr_cfg_backup_metadata: false
 platforms:
-  - name: 'seerr-debian-13-default'
+  - name: 'seerr-default'
     image: 'ghcr.io/hifis-net/debian-systemd:13'
     systemd: 'always'
     volumes:
@@ -54,19 +40,8 @@ platforms:
     pre_build_image: true
     published_ports:
       - '5055:5055/tcp'
-  - name: 'seerr-debian-13-user_data'
-    image: 'ghcr.io/hifis-net/debian-systemd:13'
-    systemd: 'always'
-    volumes:
-      - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
-    command: '/lib/systemd/systemd'
-    pre_build_image: true
 verifier:
   name: 'ansible'
-lint: |
-  set -e
-  yamllint .
-  ansible-lint .
 scenario:
   test_sequence:
     - 'destroy'

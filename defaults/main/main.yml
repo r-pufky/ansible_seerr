@@ -1,188 +1,149 @@
 ---
 ###############################################################################
-# Seerr Service Configuration
+# Feature Flags
 ###############################################################################
-# Existing databases are migrated automatically when new versions are
-# installed. Migration between database platforms is not supported and must be
-# done manually.
+
+# 1. Backup config to seerr_cfg_backup_dir?
 #
-# Requires ~2GB Memory.
+# Backup existing config data directory and exit role. Creates archive of
+# /var/opt/seerr/config. seerr_cfg_backup_dir created if non-existent. Services
+# stopped, files backed up, services started.
 #
-# Install size: ~3.4GB
-#               Seerr: ~3GB.
-#   nvm(pnpm, nodejs): ~300MB.
-#            Packages: ~48MB.
+# Default: False.
+seerr_flg_backup: false
+
+# 2. Restore config from backup?
 #
-# Set repo_host_access_token if API is rate limited. See r_pufky.deb.repo.
+# Restore config data directory and exit role. Extracts latest backup archive
+# to /var/opt/seerr/config. Services stopped, files backed up, services
+# started.
+#
+# Default: False.
+seerr_flg_restore: false
+
+# 3. Run maintenance tasks?
+#
+# Preform role maintenance tasks including removal of old role versions.
+#
+# Default: True.
+seerr_flg_maintenance: true
+
+# 4. Install application?
+#
+# Creates required default directories, users, install packages, download
+# software, builds, autogenerates config, update and start services.
+#
+# Default: True.
+seerr_flg_install: true
+
+# 5. Set configuration data?
+#
+# Overwrite config data directory sourced from seerr_cfg_dir. Use backup and
+# restore to manage configuration data. Stops service, deploys user config
+# data, updates and starts services.
+#
+# Default: False.
+seerr_flg_config: false
+
+###############################################################################
+# Service
+###############################################################################
 
 # Seerr Release.
 #
 # Versions (Schematic):
-#       MAJOR: Unsafe - requires major role changes; only default MAJOR version
-#              is supported. See other branches if they exist.
-#       MINOR: Safe - Development is very active and should stick to schematic
-#              releases, not named branch releases.
+#       MAJOR: Unsafe - Usually requires major role changes; only default MAJOR
+#              version is supported.
+#       MINOR: Safe - Usually requires no role updates. Changes usually
+#              constrained to internal changes requiring no config file or
+#              dependency changes.
 #       PATCH: Safe - Usually requires no role updates.
-#   RECOMMEND: Only increment PATCH. Never use 'latest'.
+#   RECOMMEND: Only increment MINOR.PATCH.
 #
-# Values:
-#   {VERSION}: Tagged release to use ('v2.7.3').
-#      latest: Use latest stable release.
+# Default: 'v3.1.0'.
 #
-# Default: 'v2.7.3'.
-seerr_srv_version: 'v2.7.3'
+# Reference:
+# * https://github.com/seerr-team/seerr/releases/latest
+seerr_srv_version: 'v3.1.0'
 
-# Bind Seerr service to specified interface.
+# Github access token (seerr).
 #
-# Values:
-#          '': bind to all available interfaces (default).
-#        {IP}: bind to valid IPv4/6 address ('127.0.0.1', '::', etc).
-#   localhost: bind to localhost.
+# Unauthenticated (anonymous) API requests are heavily restricted to the sum
+# total of requests to github from a given IP. Use an access token if
+# receiving 403's.
 #
-# Default: '' (all interfaces).
-seerr_srv_bind_address: ''
-
-# HTTP port. Default: 5055.
-seerr_srv_port: 5055
-
-# Remove old installs on upgrade success? Default: True.
-seerr_srv_delete_old_versions_enable: true
-
-# Service Umask. Default: '0002'.
-seerr_srv_u_mask: '0002'
-
-# Force overwrite existing install?
+# Classic Tokens:
+# * settings > developer settings > personal access tokens (classic)
+#   * notes: {LABEL APPROPRIATELY}
+#   * expiration: {CUSTOM}
+#   * scopes: NONE
 #
-# DATA DESTRUCTIVE.
+# Fine-grained Tokens:
+# * settings > developer settings > personal access tokens (fine-grained)
+#   * token name: {LABEL APPROPRIATELY}
+#   * expiration: {CUSTOM}
+#   * description: {DESCRIPTIVE TEXT}
+#   * resource owner: {YOUR ACCOUNT}
+#   * repository access: Public Repositories (read-only)
 #
-# Removes existing cached downloaded archives and existing same-version install
-# directories (if any). Any user data in these directories are DESTROYED.
+# Default: '' (unauthenticated).
 #
-# Default: False.
-seerr_srv_force_overwrite: false
-
-# Automatically restart Seerr daily? Default: True.
-seerr_srv_restart_daily_enable: true
-
-# Only apply configuration?
-#
-# Reduces role application time by ONLY applying configuration changes.
-#
-# This should ONLY be used after the role has been fully run once.
-#
-# Useful when adding a change without reconfiguring the whole system or
-# checking and installing a new version. Suggest applying with extra options:
-#
-#   ansible-playbook site.yml
-#       --tags Seerr
-#       -e '{"seerr_srv_force_config_only_enable": true}'
-#
-# Default: False.
-seerr_srv_force_config_only_enable: false
-
-# Enable polling for seerr_srv_port?
-#
-# Seerr will report service is active and running but may not be ready to
-# accept API requests for user modifications. Wait until the webserver is
-# responding before attempting API calls. Automatically proceeds after
-# forgejo_role_poll_timeout seconds.
-#
-# Default: True (poll).
-seerr_srv_poll_enable: true
-
-###############################################################################
-# Seerr Service User
-###############################################################################
+# Reference:
+# * https://docs.github.com/en/authentication
+seerr_srv_token: ''
 
 # User that Seerr will run under.
 #
-# Enable seerr_srv_create_user if this account is not externally managed.
-#
-# Must use BASH for build environment. nvm packages cached in home directory.
+# 'seerr' will automatically be created using vars/main.yml if required.
+# All other accounts are checked for existence.
 #
 # Default: 'seerr'.
 seerr_srv_user: 'seerr'
 
 # Group that Seerr will run under.
 #
-# Enable seerr_srv_create_user if this group is not externally managed.
+# 'seerr' will automatically be created using vars/main.yml if required.
+# All other accounts are checked for existence.
 #
 # Default: 'seerr'.
 seerr_srv_group: 'seerr'
 
-# Create seerr_srv_user, seerr_srv_group if not detected?
+###############################################################################
+# Config
+###############################################################################
+
+# Seerr configuration to set.
 #
-# Applied via r_pufky.deb.users, see vars/main.yml for default user attributes.
+# Ansible controller path to source configuration files (treated as a jinja2
+# templates allowing for ansible variable interpretation). Overwrites existing
+# config data in /var/opt/seerr/*. SQlite databases should be included or use
+# restore. Files not sourced will be removed (cache metadata directory will not
+# be touched). A default configuration is autogenerated if not provided.
+#
+# Place service environment configuration in '.env'. See files/ for examples.
+#
+# Use seerr_flg_backup, seerr_flg_restore to include MediaCover metadata.
+#
+# deluge_cfg_dir: 'host_vars/seerr.example.com/config'
+#
+# Default: '' (use minimally configured default).
+seerr_cfg_dir: ''
+
+# Role backup location.
+#
+# All backup operations for a given role execution are stored locally on
+# ansible controller with the format 'YYYY-MM-DDTHHMMSS_{FILE}'.
+#
+# seerr_cfg_backup_dir: 'data/seerr'
+#
+# Default: ''
+seerr_cfg_backup_dir: ''
+
+# Backup metadata (cache) directory?
+#
+# Multi-GB. Safe to delete. Will cause large backup/restore transfers or
+# re-download of metadata when service is restarted. Alternatively externally
+# manage /var/opt/seerr/config/cache.
 #
 # Default: True.
-seerr_srv_create_user: true
-
-# Enable user management of data/media files?
-#
-# Use seerr_srv_user to execute data/media management commands. Role
-# applies media permissions using 'root' by default. For mounted data locations
-# (NFS with squashed mounts, mapped container mounts, etc) the local root user
-# will not have sufficient privileges to modify these files.
-#
-# Applies to:
-# * /opt/seerr
-#
-# Default: False.
-seerr_srv_user_data_manage_enable: false
-
-###############################################################################
-# Build Options
-###############################################################################
-
-# Build memory restriction (MB).
-#
-# Restrict builds to only use specified amount of RAM when building project. By
-# default this is auto detected but may be overridden if it is reported
-# incorrectly in container systems.
-#
-# Values:
-#    #: Memory ceiling for Builds.
-#   -1: Autodetect memory ceiling (default).
-#
-# Default: -1 (autodetect).
-seerr_srv_build_memory: -1
-
-# Clean PNPM cache after build?
-#
-# This will clear unused packages from the PNPM build cache after a successful
-# build; which may help to maintain reasonable disk space usage when upgrading
-# between versions.
-#
-# Default: True.
-seerr_srv_build_clear_cache: true
-
-###############################################################################
-# Seerr Owner
-###############################################################################
-# Seerr owner provides initial login, configuration, and REST API use.
-#
-# Additional owner options and users may be configured after service started.
-
-# Owner email. Default: 'seerr@example.com'.
-seerr_srv_owner_email: 'seerr@example.com'
-
-# Owner username. Default: 'seerr'.
-seerr_srv_owner_username: 'seerr'
-
-# Owner password. Default: '{RANDOM}' (randomly generated).
-seerr_srv_owner_password: '{{
-    lookup("ansible.builtin.password",
-           "/dev/null",
-           chars=["ascii_lowercase", "ascii_uppercase", "digits"],
-           length=32)
-  }}'
-
-# Owner avatar.
-#
-# Avatar URL for profile picture. Use image link from Plex/Seerr profile.
-#
-# Default: (empty silhouette).
-seerr_srv_owner_avatar: '{{
-    "https://gravatar.com/avatar/" ~
-    "c77fdc27cab83732b8623d2ea873d330?default=mm&size=200"
-  }}'
+seerr_cfg_backup_metadata: true

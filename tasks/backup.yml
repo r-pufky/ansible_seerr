@@ -1,0 +1,61 @@
+---
+###############################################################################
+# Backup
+###############################################################################
+# Only backup SQLite databases and configuration directory.
+
+- name: 'Backup | fact | parse location'
+  ansible.builtin.set_fact:
+    seerr__archive: '{{ "/tmp/" ~ seerr__srv._start ~ "_config.tar.xz" }}'
+
+- name: 'Backup | warning | ⚠ Metadata Enabled ⚠'
+  when: seerr__cfg._backup_metadata
+  ansible.builtin.debug:
+    msg: |
+
+      ⚠ Metadata Enabled ⚠
+
+      /var/opt/seerr/config/cache may be Multi-GB. A backup effectively doubles
+      the space used during the process and may fail if low disk space.
+
+      Transfer may be very long.
+
+
+- name: 'Backup | filesystem | set backup location'
+  when:
+    seerr__cfg._backup_dir | length > 0 and seerr__cfg._backup_dir != '/tmp'
+  delegate_to: 'localhost'
+  run_once: true
+  ansible.builtin.file:
+    path: '{{ seerr__cfg._backup_dir }}'
+    mode: '0750'
+    state: directory
+
+- name: '{{  "Backup | cmd | create " ~ seerr__archive }}'
+  ansible.builtin.shell: '{{
+      "/usr/bin/tar " ~
+      ("--exclude=cache" if not seerr__cfg._backup_metadata else "") ~
+      " -cvJf " ~ seerr__archive ~ " ."
+    }}'
+  args:
+    executable: '/bin/bash'
+    chdir: '{{ seerr__cfg._env | dirname }}'
+  changed_when: true
+
+- name:
+    '{{ "Backup | fetch | " ~ seerr__archive }}'
+  ansible.posix.synchronize:
+    mode: pull
+    src: '{{ seerr__archive }}'
+    dest: '{{ seerr__cfg._backup_dir ~ "/" }}'
+
+- name: 'Backup | filesystem | cleanup'
+  ansible.builtin.file:
+    path: '{{ "/tmp/" ~ seerr__srv._start ~ "_config.tar.xz" }}'
+    state: 'absent'
+
+- name: 'Backup | start'
+  ansible.builtin.import_tasks: 'start.yml'
+
+- name: 'Backup | success ✔'
+  ansible.builtin.meta: 'end_host'

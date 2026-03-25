@@ -1,20 +1,26 @@
 ---
-- name: 'Assert'
-  ansible.builtin.include_tasks: 'assert.yml'
-- name: 'Annotate'
-  ansible.builtin.include_tasks: 'annotate.yml'
 - name: 'Prep'
   ansible.builtin.include_tasks: 'prep.yml'
+
+- name: 'Backup'
+  when: seerr_flg_backup
+  ansible.builtin.include_tasks: 'backup.yml'
+
+- name: 'Restore'
+  when: seerr_flg_restore
+  ansible.builtin.include_tasks: 'restore.yml'
+
+- name: 'Maintenance'
+  when: seerr_flg_maintenance
+  ansible.builtin.import_tasks: 'maintenance.yml'
+
 - name: 'Install'
+  when: seerr_flg_install
   ansible.builtin.include_tasks: 'install.yml'
 
-- name: 'Build'
-  when: not seerr_srv_force_config_only_enable
-  ansible.builtin.include_tasks: 'build.yml'
-
 - name: 'Config'
+  when: seerr_flg_config
   ansible.builtin.include_tasks: 'config.yml'
-- name: 'Set owner'
-  ansible.builtin.include_tasks: 'set_owner.yml'
-- name: 'Validate'
-  ansible.builtin.include_tasks: 'validate.yml'
+
+- name: 'Start'
+  ansible.builtin.include_tasks: 'start.yml'

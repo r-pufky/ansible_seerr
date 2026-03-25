@@ -2,119 +2,108 @@
 ###############################################################################
 # Seerr Install
 ###############################################################################
-# Install specified version from github release.
+# Install specified version from github release. Install required NodeJS
+# dependencies from source to /var/opt/seerr. Use custom service according to
+# Linux FHS standards:
 #
-# All JS package managers, JS, and NodeJS are absolute meat-hook abominations
-# of anything resembling sanity for automated processes.
+# Type    | Perms               | Path
+# --------|---------------------|-------
+# Runtime | 0750/0640 SRV:SRV   | /var/opt/seerr
+# Source  | 0755/0644 root:root | /opt/seerr
 #
-# Install required NodeJS dependencies from source to service user home
-# directory, ensuring a idempotent, pure, NodeJS setup for building. Built in
-# packages and other methods for deploying package managers on top of package
-# managers on top of package managers in practice lead to extremely nuanced and
-# hard to debug issues in practice; when the typical developer response is now
-# to 'install from head', especially for cases like 'I just want these
-# dependencies installed, is it really that hard? This is a solved problem many
-# fucking times over, quit reinventing the fucking wheel.'.
-#
-# Rant over.
+# Installation notes:
+# * NVM environment is a git clone, per-user, typically in the home directory.
+#     Resolution: Place NVM environment in /var/opt/seerr/.nvm.
+# * Seerr expects all configuration data to reside in a single directory: DB's,
+#   config, and metadata.
+#     Resolution: Place all config data within /var/opt/seerr/config.
 #
 # Reference:
 # * https://docs.seerr.dev/getting-started/buildfromsource
 
-- name: 'Install | create build directories'
+- name: 'Install | filesystem | set system directories'
   ansible.builtin.file:
-    path: '{{ item }}'
-    owner: '{{ _seerr_srv_user._uid }}'
-    group: '{{ _seerr_srv_group._gid }}'
+    path: '{{ seerr___app._src_dir }}'
+    owner: 'root'
+    group: 'root'
     mode: '0755'
     state: 'directory'
-  become: true
-  become_user: '{{
-      _seerr_srv_user.raw
-      if _seerr_srv_user_data_manage_enable.raw else
-      "root"
-    }}'
-  loop:
-    - '{{ _seerr.nvm_dir }}'
-    - '{{ _seerr.nvm_cache }}'
 
-- name: 'Install | set nvm environment'
-  ansible.builtin.template:
-    src: 'nvm.env.j2'
-    dest: '{{ _seerr.nvm_env }}'
-    owner: '{{ _seerr_srv_user._uid }}'
-    group: '{{ _seerr_srv_group._gid }}'
-    mode: '0644'
+- name: 'Install | filesystem | set service directories'
+  ansible.builtin.file:
+    path: '{{ item }}'
+    owner: '{{ seerr__srv._user }}'
+    group: '{{ seerr__srv._group }}'
+    mode: '0750'
+    state: 'directory'
+  loop:
+    - '{{ seerr___app._env | dirname }}'  # .env includes var_dir.
+    - '{{ seerr___nvm._dir }}'
+    - '{{ seerr___nvm._cache }}'
 
 - name: 'Install | packages'
   ansible.builtin.include_role:
     name: 'r_pufky.deb.apt'
   vars:
     apt_packages:
-      - '{{ seerr_role_packages }}'
-    apt_package_update_cache: true
+      - '{{ seerr___packages }}'
+    apt_srv_package_update_cache: true
 
-# Preload environment for pure nvm install.
-- name: 'Install | nvm {{ seerr__nvm_version }}'
-  ansible.builtin.shell:
-    'set -o pipefail && curl -o- {{ seerr__nvm_url }} | bash'
-  args:
-    executable: '/bin/bash'
-    creates: '{{ _seerr.nvm_sh }}'
-    chdir: '{{ _seerr.nvm_dir }}'
-  environment:
-    NVM_DIR: '{{ _seerr.nvm_dir }}'
-  changed_when: false
-  become: true
-  become_user: '{{ _seerr_srv_user.raw }}'
+###############################################################################
+# Seerr
+###############################################################################
+# Install source and determine required dependency versions to install.
 
-- name: 'Install | nodejs {{ seerr__nvm_nodejs_version }}'
-  ansible.builtin.shell: >
-    source {{ _seerr.nvm_env }} &&
-    nvm install {{ seerr__nvm_nodejs_version }}
-  args:
-    executable: '/bin/bash'
-    chdir: '{{ _seerr.nvm_dir }}'
-  changed_when: false
-  become: true
-  become_user: '{{ _seerr_srv_user.raw }}'
+- name: 'Install | filesystem | find previous installations'
+  ansible.builtin.find:
+    paths: '{{ seerr__cfg._src_dir }}'
+    file_type: 'directory'
+    recurse: false
+    excludes:
+      - '{{ seerr__cfg._version }}'
+  register: seerr__install
 
-- name: 'Install | pnpm'
-  ansible.builtin.shell:
-    source {{ _seerr.nvm_env }} && corepack enable pnpm
-  args:
-    executable: '/bin/bash'
-    chdir: '{{ _seerr.nvm_dir }}'
-  changed_when: false
-  become: true
-  become_user: '{{ _seerr_srv_user.raw }}'
+- name: 'Install | filesystem | remove previous installations'
+  ansible.builtin.file:
+    path: '{{ item.path }}'
+    state: 'absent'
+  loop: '{{ seerr__install.files }}'
+  loop_control:
+    label: '{{ item.path }}'
 
-- name: 'Install | Seerr package {{ seerr_srv_version }}'
-  ansible.builtin.include_role:
-    name: 'r_pufky.deb.repo'
-  vars:
-    repo_release_owner: '{{ seerr_role_repo_release_owner }}'
-    repo_release_repo: '{{ seerr_role_repo_release_repo }}'
-    repo_release_tag: '{{ _seerr_srv_version.raw }}'
-    repo_release_asset: '{{ seerr_role_repo_release_asset }}'
-    repo_release_download_source_enable:
-      '{{ seerr_role_repo_release_download_source_enable }}'
-    repo_file_owner: '{{ _seerr_srv_user._uid }}'
-    repo_file_group: '{{ _seerr_srv_group._gid }}'
-    repo_extract_dir: '{{ seerr_role_repo_extract_dir }}'
-    repo_extract_symlink: '{{ seerr_role_repo_extract_symlink }}'
-    repo_extract_migrate_files:
-      - 'config/db/db.sqlite3'
-      - 'config/db/db.sqlite3-shm'  # Seerr never closes DB's correctly.
-      - 'config/db/db.sqlite3-wal'
-      - 'config/settings.json'
-      - 'config/cache'  # Local TMDB image caching.
-    repo_extract_delete_old_versions:
-      '{{ _seerr_srv_delete_old_versions_enable.raw }}'
-    repo_force_overwrite: '{{ _seerr_srv_force_overwrite.raw }}'
-    repo_extract_mode: 'a-st'  # ,o-rwx'
-    repo_extract_extra_opts: ['--strip-components=1']
-    repo_extract_remove_files:
+- name: 'Install | url | 🗘 Seerr (~1 minute) 🗘'
+  when: not (url_inject_enable | default(false))
+  ansible.builtin.get_url:
+    url: '{{ seerr__cfg._url }}'
+    dest: '{{ "/tmp/" ~ seerr__cfg._package }}'
+    force: false
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+    headers:
+      Authorization: '{{ seerr__srv._token | default(omit) }}'
+  register: seerr__install
+  until: seerr__install is succeeded
+
+- name: '{{ "Install | filesystem | set " ~ seerr__cfg._app }}'
+  ansible.builtin.file:
+    path: '{{ seerr__cfg._app }}'
+    owner: 'root'
+    group: 'root'
+    mode: '0755'
+    state: 'directory'
+
+- name: 'Install | filesystem | unpack Seerr'
+  ansible.builtin.unarchive:
+    creates: '{{ seerr__cfg._package_json }}'
+    src: '{{ "/tmp/" ~ seerr__cfg._package }}'
+    remote_src: true
+    dest: '{{ seerr__cfg._app }}'
+    owner: 'root'
+    group: 'root'
+    mode: 'a-st'
+    extra_opts: ['--strip-components=1']
+    exclude:
       - '.all-contributorsrc'  # GIT.
       - '.dockerignore'  # Docker.
       - '.editorconfig'  # IDE.
@@ -150,18 +139,175 @@
       - 'snap'  # Snap build.
       - 'stylelint.config.js'  # IDE.
       - 'cypress'  # Testing.
+  register: seerr__install
 
-- name: 'Install | dependencies'
+- name: '{{ "Install | filesystem | query " ~ seerr__cfg._package_json }}'
+  ansible.builtin.slurp:
+    src: '{{ seerr__cfg._package_json }}'
+  register: seerr__package_json
+
+- name: 'Install | fact | set required NodeJS version'
+  ansible.builtin.set_fact:
+    seerr__cfg: "{{ seerr__cfg | r_pufky.data.v3(
+
+        _node_js=(
+          (
+            (seerr__package_json.content | b64decode | from_json).engines.node |
+            regex_replace('^\\^', '')
+          ).split('.')[0]
+        ),
+      ) }}"
+    seerr__pnpm: "{{ seerr___pnpm | r_pufky.data.v3(
+
+        _app=seerr__cfg._home ~ '/.local/share/pnpm/pnpm',
+      ) }}"
+
+###############################################################################
+# NVM Environment
+###############################################################################
+# NVM manages NodeJS versions more recent than debian packages.
+
+- name: '{{ "Install | filesystem | " ~ seerr___nvm._env }}'
+  ansible.builtin.template:
+    src: 'nvm.env.j2'
+    dest: '{{ seerr___nvm._env }}'
+    owner: '{{ seerr__srv._user }}'
+    group: '{{ seerr__srv._group }}'
+    mode: '0644'
+
+- name: '{{ "Install | cmd | nvm " ~ seerr___nvm._version }}'
+  ansible.builtin.shell:
+    'set -o pipefail && curl -o- {{ seerr___nvm._url }} | bash -'
+  args:
+    executable: '/bin/bash'
+    creates: '{{ seerr___nvm._sh }}'
+    chdir: '{{ seerr___nvm._dir }}'
+  environment:
+    NVM_DIR: '{{ seerr___nvm._dir }}'
+  changed_when: false
+  become: true
+  become_user: '{{ seerr__srv._user }}'
+
+###############################################################################
+# NodeJS
+###############################################################################
+# Install version required by packages.json for this specific release. Strip
+# qualifier and keep major version (always install latest major version).
+# Requires NVM to install.
+
+- name: '{{ "Install | cmd | nvm install nodejs " ~ seerr__cfg._node_js }}'
+  when: seerr__install.changed  # noqa no-handler immediate.
+  ansible.builtin.shell:
+    source {{ seerr___nvm._env }} && nvm install {{ seerr__cfg._node_js }}
+  args:
+    executable: '/bin/bash'
+    chdir: '{{ seerr___nvm._dir }}'
+  changed_when: false
+  become: true
+  become_user: '{{ seerr__srv._user }}'
+
+- name: 'Install | cmd | resolve node location'
+  ansible.builtin.shell:
+    '{{ "source " ~ seerr___nvm._env ~ " && which node" }}'
+  args:
+    executable: '/bin/bash'
+  changed_when: false
+  become: true
+  become_user: '{{ seerr__srv._user }}'
+  register: seerr__node_path
+
+- name: 'Install | fact | set node location'
+  ansible.builtin.set_fact:
+    seerr__cfg: "{{ seerr__cfg | r_pufky.data.v3(
+
+        _node=seerr__node_path.stdout,
+      ) }}"
+
+###############################################################################
+# PNPM
+###############################################################################
+# PNPM manages the package environment for Seerr. Install version required by
+# packages.json for this specific release. Strip qualifier and keep major
+# version (always install latest major version).
+#
+# Corepack will automatically install the latest required major PNPM version
+# from the project directory using package.json⋮packageManager.pnpm after
+# being enabled in the project directory.
+
+- name: 'Install | cmd | pnpm install'
+  ansible.builtin.shell:
+    'set -o pipefail && curl -fsSL https://get.pnpm.io/install.sh | bash -'
+  args:
+    executable: '/bin/bash'
+    chdir: '{{ seerr__cfg._var_dir }}'
+    creates: '{{ seerr__pnpm._app }}'
+  changed_when: false
+  become: true
+  become_user: '{{ seerr__srv._user }}'
+
+- name: 'Install | cmd | pnpm install dependencies'
   ansible.builtin.shell: >
-      source {{ _seerr.nvm_env }} &&
-      {{ _seerr.corepack }} &&
+      source {{ seerr___nvm._env }} &&
+      corepack enable &&
+      corepack use pnpm@latest &&
       pnpm install --frozen-lockfile
   args:
     executable: '/bin/bash'
-    chdir: '{{ seerr_role_repo_extract_symlink }}'
+    chdir: '{{ seerr__cfg._app }}'
+    creates: '{{ seerr__cfg._app ~ "/node_modules" }}'
   environment:
     CYPRESS_INSTALL_BINARY: '0'
     HUSKY: '0'
   changed_when: false
-  become: true
-  become_user: '{{ _seerr_srv_user.raw }}'
+
+###############################################################################
+# Build
+###############################################################################
+# Limit V8 object cache to system memory size and disable source maps. If
+# javascript heap out of memory error continually occurs increase the minimum
+# memory requirement for the role.
+#
+# Reference:
+# * https://docs.seerr.dev/getting-started/buildfromsource
+
+- name: 'Install | build | 🗘 Seerr (~2 minutes) 🗘'
+  ansible.builtin.debug:
+    msg: 'Building Seerr (~2 minutes).'
+
+- name: '{{ "Install | build | Seerr " ~ seerr__cfg._version }}'
+  ansible.builtin.shell: >
+    source {{ seerr___nvm._env }} &&
+    pnpm build &&
+    pnpm store prune
+  args:
+    executable: '/bin/bash'
+    chdir: '{{ seerr__cfg._app }}'
+    creates: '{{ seerr__cfg._app ~ "/dist" }}'
+  environment:
+    NODE_OPTIONS: '--max-old-space-size=-1'
+    GENERATE_SOURCEMAP: 'false'
+  changed_when: true
+  register: seerr__build
+
+- name: 'Install | filesystem | query environment'
+  ansible.builtin.stat:
+    path: '{{ seerr__cfg._env }}'
+  register: seerr__env
+
+# Only overwrite .env if no config set and it is a new install.
+- name: '{{ "Install | filesystem | set minimal " ~ seerr__cfg._env }}'
+  when: seerr__cfg._dir | length == 0 and not seerr__env.stat.exists
+  ansible.builtin.template:
+    src: 'files/default/.env'
+    dest: '{{ seerr__cfg._env }}'
+    owner: '{{ seerr__srv._user }}'
+    group: '{{ seerr__srv._group }}'
+    mode: '0640'
+
+- name: '{{ "Install | filesystem | set " ~ seerr__cfg._service }}'
+  ansible.builtin.template:
+    src: 'systemd/seerr.service.j2'
+    dest: '{{ seerr__cfg._service }}'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'

@@ -1,8 +1,32 @@
 ---
+# Backup/Restore are controlled exits and must be called in separate plays or
+# it will consider play complete and move to verify.
 - name: 'Converge'
   hosts: 'all'
-  gather_facts: true  # ansible_facts for memory sizing.
+  gather_facts: false
   tasks:
-    - name: 'Converge | apply r_pufky.arr.seerr'
+    # Inject .env and reset DBs; .env tested after restore.
+    - name: 'Converge | role | r_pufky.arr.seerr (pre-configured .env)'
       ansible.builtin.include_role:
         name: 'r_pufky.arr.seerr'
+      vars:
+        seerr_flg_config: true
+        seerr_cfg_dir: '{{
+            lookup("env", "MOLECULE_PROJECT_DIRECTORY") ~ "/files/default"
+          }}'
+
+    - name: 'Converge | role | r_pufky.arr.seerr (create db backup)'
+      ansible.builtin.include_role:
+        name: 'r_pufky.arr.seerr'
+      vars:
+        seerr_flg_backup: true
+
+- name: 'Converge'
+  hosts: 'all'
+  gather_facts: false
+  tasks:
+    - name: 'Converge | role | r_pufky.arr.seerr (restore)'
+      ansible.builtin.include_role:
+        name: 'r_pufky.arr.seerr'
+      vars:
+        seerr_flg_restore: true

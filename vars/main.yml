@@ -1,0 +1,114 @@
+---
+###############################################################################
+# Seerr Role Options
+###############################################################################
+# Build from source.
+#
+# Updates:
+# * Branch for new Debian releases.
+# * KEEP a separate change log as changes are made.
+# * Use bare-metal docs to validate package/process changes.
+# * Update defaults.
+# * Update tests for any changes.
+# * Standard validation testing (yamllint, ansible-lint, to-do, no-qa).
+#
+# Reference:
+# * https://seerr.dev/
+# * https://docs.seerr.dev/
+# * https://github.com/seerr-team/seerr
+
+seerr___release: "{{ {} | r_pufky.data.v3(
+
+    _date='2026-03-24',
+    _debian='trixie',
+    _app='v3.1.0',
+    _nvm='v0.40.4',
+  ) }}"
+
+###############################################################################
+# APT Packages
+###############################################################################
+
+seerr___packages:
+  - 'git'  # nvm/pnpm.
+  - 'curl'  # nvm/pnpm.
+  - 'sqlite3'  # sqlite3.
+  - 'gnupg2'  # GPG for certificates.
+  - 'ca-certificates'  # Up to date certificates for certificate validation.
+
+  # Ansible.
+  - 'xz-utils'  # xz archives.
+  - 'rsync'  # ansible.posix.synchronize.
+
+###############################################################################
+# Seerr GitHub Options
+###############################################################################
+# Only source code is released. Environment file is used to manage service
+# settings. Stored with config data in /var/opt/seerr/config.
+#
+# Reference:
+# * https://github.com/seerr-team/seerr/releases/latest
+
+seerr___repo_url: 'https://github.com/seerr-team/seerr/archive/refs/tags/'
+seerr___package: '{{ seerr___release._app ~ ".tar.gz" }}'
+
+seerr___app: "{{ {} | r_pufky.data.v3(
+
+    _version=seerr___release._app,
+    _package=seerr___package,
+    _var_dir='/var/opt/seerr',
+    _env='/var/opt/seerr/config/.env',
+    _src_dir='/opt/seerr/src',
+    _app='/opt/seerr/src/' ~ seerr___release._app,
+    _package_json='/opt/seerr/src/' ~ seerr___release._app ~ '/package.json',
+    _service='/etc/systemd/system/seerr.service',
+    _base_url=seerr___repo_url,
+    _url=seerr___repo_url ~ seerr___package,
+  ) }}"
+
+###############################################################################
+# NVM Options
+###############################################################################
+
+seerr___nvm_repo_url: 'https://raw.githubusercontent.com/nvm-sh/nvm/'
+
+seerr___nvm: "{{ {} | r_pufky.data.v3(
+
+    _version=seerr___release._nvm,
+    _env=seerr___app._var_dir ~ '/nvm.env',
+    _dir=seerr___app._var_dir ~ '/.nvm',
+    _sh=seerr___app._var_dir ~ '/.nvm/nvm.sh',
+    _cache=seerr___app._var_dir ~ '/.cache/node',
+    _url=seerr___nvm_repo_url ~ seerr___release._nvm ~ '/install.sh',
+  ) }}"
+
+###############################################################################
+# PNPM Options
+###############################################################################
+
+seerr___pnpm: "{{ {} | r_pufky.data.v3(
+
+    _url='https://get.pnpm.io/install.sh',
+    _app=seerr___app._var_dir ~ '/.local/share/pnpm/pnpm',
+  ) }}"
+
+###############################################################################
+# Default Seerr User/Group
+###############################################################################
+
+seerr___group:
+  name: 'seerr'
+  gid: 5560
+
+seerr___user:
+  name: 'seerr'
+  group: 'seerr'
+  uid: 5560
+  shell: '/bin/bash'
+  home: '/var/opt/seerr'
+  create_home: true
+  password: '!'
+  password_lock: true
+  update_password: 'always'
+  expires: -1
+  system: true

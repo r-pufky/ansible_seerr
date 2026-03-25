@@ -3,14 +3,22 @@
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'Verify | seerr.conf'
+    - name: 'Prepare | import role variables'
+      ansible.builtin.include_vars:
+        file: '{{
+            lookup("env", "MOLECULE_PROJECT_DIRECTORY") ~ "/vars/main.yml"
+          }}'
+
+    - name: '{{ "Verify | test | " ~ seerr___app._env }}'
       ansible.builtin.include_role:
-        name: 'r_pufky.lib.tests'
+        name: 'r_pufky.data.test'
         tasks_from: 'copy.yml'
       vars:
-        test_name: 'Verify | seerr.conf'
-        test_src: 'files/seerr.conf'
-        test_file: '/etc/seerr/seerr.conf'
+        test_name: '{{ "Verify | test | " ~ seerr___app._env }}'
+        test_src: '{{
+            lookup("env", "MOLECULE_PROJECT_DIRECTORY") ~ "/files/default/.env"
+          }}'
+        test_file: '{{ seerr___app._env }}'
         test_owner: 'seerr'
         test_group: 'seerr'
         test_mode: '0640'

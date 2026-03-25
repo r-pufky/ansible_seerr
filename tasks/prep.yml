@@ -1,59 +1,131 @@
 ---
 ###############################################################################
-# Seerr Prep
+#  Pre Execution Tasks
 ###############################################################################
-#
-# Generates:
-#   _seerr: dict - Role runtime specific config.
+# Only use data annotations in role after merging role, defaults, runtime data.
+# Service may not exist if first install.
 #
 # Reference:
 # * https://seerr.dev/
 # * https://github.com/sct/seerr/
 # * https://docs.seerr.dev/getting-started/installation
 
-- name: 'Prep | manage users'
-  when: _seerr_srv_create_user.raw
-  ansible.builtin.include_role:
-    name: 'r_pufky.deb.users'
-    tasks_from: 'role_account_add.yml'
-  vars:
-    users_role_user: '{{ seerr_role_user }}'
-    users_role_group: '{{ seerr_role_group }}'
+- name: 'Prep | fact | record start time'
+  ansible.builtin.set_fact:
+    seerr__srv: "{{ seerr___release | r_pufky.data.v3(
 
-- name: 'Prep | enumerate system user {{ _seerr_srv_user.raw }}'
+        _start=now(utc=True, fmt='%Y-%m-%dT%H%M%S'),
+        _token=seerr_srv_token,
+        _user=seerr_srv_user,
+        _group=seerr_srv_group,
+      ) }}"
+    seerr__cfg: "{{ seerr___app | r_pufky.data.v3(
+
+        _version=seerr_srv_version,
+        _package=seerr_srv_version ~ '.tar.gz',
+        _dir=seerr_cfg_dir | regex_replace('\\/$', ''),
+        _backup_dir=seerr_cfg_backup_dir | regex_replace('\\/$', ''),
+        _backup_metadata=seerr_cfg_backup_metadata,
+        _app='/opt/seerr/src/' ~ seerr_srv_version,
+        _package_json='/opt/seerr/src/' ~ seerr_srv_version ~ '/package.json',
+        _url=seerr___repo_url ~ seerr___release._app ~ '.tar.gz',
+      ) }}"
+
+- name: 'Prep | assert | backup enabled and location defined'
+  when: seerr_flg_backup
+  ansible.builtin.assert:
+    quiet: true
+    that:
+      - seerr__cfg._backup_dir | length > 0
+    fail_msg: |
+
+      ✘ Backup location not set.
+      Backups enabled but no backup location defined.
+
+      seerr_flg_backup: {{ seerr_flg_backup }}
+      seerr_cfg_backup_dir: {{ seerr__cfg._backup_dir }}
+
+- name: 'Prep | assert | restore enabled and location defined'
+  when: seerr_flg_restore
+  ansible.builtin.assert:
+    quiet: true
+    that:
+      - seerr__cfg._backup_dir | length > 0
+    fail_msg: |
+
+      ✘ Backup location not set.
+      Backups enabled but no backup location defined.
+
+      seerr_flg_restore: {{ seerr_flg_restore }}
+      seerr_cfg_backup_dir: {{ seerr__cfg._backup_dir }}
+
+- name: 'Prep | assert | config enabled and source defined'
+  when: seerr_flg_config
+  ansible.builtin.assert:
+    quiet: true
+    that:
+      - seerr__cfg._dir | length > 0
+    fail_msg: |
+
+      ✘ Config source not set.
+      Config source enabled but no config source defined.
+
+      seerr_flg_config: {{ seerr_flg_config }}
+      seerr_cfg_dir: {{ seerr__cfg._dir }}
+
+- name: '{{ "Prep | account | query user " ~ seerr__srv._user }}'
+  ansible.builtin.command: '{{ "id " ~ seerr__srv._user }}'
+  failed_when: false
+  register: seerr__cfg_check
+  changed_when: seerr__cfg_check.rc > 0
+
+- name: '{{ "Prep | account | query group " ~ seerr__srv._group }}'
+  ansible.builtin.command: '{{ "groups " ~ seerr__srv._group }}'
+  failed_when: false
+  register: seerr__group_check
+  changed_when: seerr__group_check.rc > 0
+
+- name: '{{ "Prep | account | create group " ~ seerr__srv._group }}'
+  when: seerr__group_check.rc != 0
+  ansible.builtin.group:
+    gid: '{{ seerr___group.gid }}'
+    name: '{{ seerr___group.name }}'
+    state: 'present'
+
+- name: '{{ "Prep | account | create user " ~ seerr__srv._user }}'
+  when: seerr__cfg_check.rc != 0
   ansible.builtin.user:
-    name: '{{ _seerr_srv_user.raw }}'
+    name: '{{ seerr___user.name }}'
+    group: '{{ seerr___user.group }}'
+    uid: '{{ seerr___user.uid }}'
+    shell: '{{ seerr___user.shell }}'
+    home: '{{ seerr___user.home }}'
+    create_home: '{{ seerr___user.create_home }}'
+    password: '{{ seerr___user.password }}'
+    password_lock: '{{ seerr___user.password_lock }}'
+    update_password: '{{ seerr___user.update_password }}'
+    expires: '{{ seerr___user.expires }}'
+    system: '{{ seerr___user.system }}'
+
+# Pre-existing users may have a different UID/GID/Home.
+- name: '{{ "Prep | account | enumerate " ~ seerr__srv._user }}'
+  ansible.builtin.user:
+    name: '{{ seerr__srv._user }}'
   check_mode: true
   changed_when: false
-  register: _seerr_srv_user_query
+  register: seerr__cfg_query
 
-- name: 'Prep | parse system user UID/GID'
+- name: 'Prep | fact | parse service UID/GID'
   ansible.builtin.set_fact:
-    _seerr_srv_user: '{{
-        _seerr_srv_user |
-        combine({"_uid": _seerr_srv_user_query.uid,
-                 "_home": _seerr_srv_user_query.home})
-      }}'
-    _seerr_srv_group: '{{
-        _seerr_srv_group |
-        combine({"_gid": _seerr_srv_user_query.group})
-      }}'
+    seerr__cfg: "{{ seerr__cfg | r_pufky.data.v3(
 
-- name: 'Prep | generate config locations'
-  ansible.builtin.set_fact:
-    _seerr: {
-      nvm_env: '{{ _seerr_srv_user._home ~ "/nvm.env" }}',
-      nvm_dir: '{{ _seerr_srv_user._home ~ "/.nvm" }}',
-      nvm_sh: '{{ _seerr_srv_user._home ~ "/.nvm/nvm.sh" }}',
-      nvm_cache: '{{ _seerr_srv_user._home ~ "/.cache/node" }}',
-      corepack:
-        '{{ "corepack use pnpm@latest-" ~ seerr__nvm_pnpm_version }}',
-    }
+        _uid=seerr__cfg_query.uid,
+        _gid=seerr__cfg_query.group,
+        _home=seerr__cfg_query.home,
+      ) }}"
 
-- name: 'Prep | stop services'
+- name: 'Prep | systemd | stop seerr.service'
   ansible.builtin.systemd:
-    name: '{{ item }}'
+    name: 'seerr.service'
     state: 'stopped'
   failed_when: false
-  loop:
-    - 'seerr.service'
