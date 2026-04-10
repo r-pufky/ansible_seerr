@@ -10,7 +10,7 @@
 - name: 'Restore | filesystem | enumerate all backups'
   delegate_to: 'localhost'
   ansible.builtin.find:
-    paths: '{{ seerr__cfg._backup_dir }}'
+    paths: '{{ seerr__cfg._backup_d }}'
     patterns: '*.tar.xz'
     file_type: 'file'
     recurse: false
@@ -39,7 +39,7 @@
   ansible.builtin.command: '{{
       "/usr/bin/tar -xJpf " ~
       "/tmp/" ~ seerr__restore_archive | basename ~
-      " -C " ~ seerr__cfg._env | dirname ~ " --overwrite"
+      " -C " ~ seerr___app._env | dirname ~ " --overwrite"
     }}'
   changed_when: true
 

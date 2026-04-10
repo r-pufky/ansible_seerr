@@ -82,7 +82,7 @@ DB's, etc. Existing installs likely want to use **backup** and **restore**.
     name: 'r_pufky.arr.seerr'
   vars:
     seerr_flg_config: true
-    seerr_cfg_dir: 'host_vars/seerr.example.com/data'
+    seerr_cfg_d: 'host_vars/seerr.example.com/data'
 ```
 
 #### Dynamic Deployments
@@ -102,14 +102,14 @@ or leave seerr_flg_config disabled to leave existing config untouched.
     name: 'r_pufky.arr.seerr'
   vars:
     seerr_flg_backup: true
-    seerr_cfg_backup_dir: '/tmp'
+    seerr_cfg_backup_d: '/tmp'
 
 - name: 'Restore from backup.'
   ansible.builtin.include_role:
     name: 'r_pufky.arr.seerr'
   vars:
     seerr_flg_restore: true
-    seerr_cfg_backup_dir: '/tmp'
+    seerr_cfg_backup_d: '/tmp'
 ```
 
 ## Development
@@ -119,6 +119,12 @@ Configure [environment][a].
 # Run all tests.
 molecule test --all
 ```
+
+Testing variables:
+
+  Variable            | Type | Description
+ ---------------------|------|-------------
+  molecule_flg_inject | bool | Disable **get_url** to inject files locally.
 
 ### [Releases][b]
 
@@ -155,8 +161,8 @@ PGP: [466EEC2B67516C7117C85CE3A0BC35D16698BAB9][d] | [github gist][e]
 [j]: https://github.com/r-pufky/ansible_seerr/tree/main/defaults/main/main.yml
 [k]: https://github.com/r-pufky/ansible_seerr/blob/main/defaults/main/ports.yml
 [l]: https://docs.seerr.dev/extending-seerr/database-config#postgresql-options
-[m]: https://github.com/r-pufky/ansible_seerr/blob/main/files/postgres/.env
-[n]: https://github.com/r-pufky/ansible_seerr/blob/main/files/
+[m]: https://github.com/r-pufky/ansible_seerr/blob/main/templates/postgres/.env
+[n]: https://github.com/r-pufky/ansible_seerr/blob/main/templates/
 [o]: https://seerr.dev
 [p]: https://docs.seerr.dev/using-seerr/users/owner
 [q]: https://docs.seerr.dev/migration-guide

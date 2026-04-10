@@ -56,10 +56,10 @@ seerr___app: "{{ {} | r_pufky.data.v3(
 
     _version=seerr___release._app,
     _package=seerr___package,
-    _var_dir='/var/opt/seerr',
+    _var_d='/var/opt/seerr',
     _env='/var/opt/seerr/config/.env',
-    _src_dir='/opt/seerr/src',
-    _app='/opt/seerr/src/' ~ seerr___release._app,
+    _src_d='/opt/seerr/src',
+    _app_d='/opt/seerr/src/' ~ seerr___release._app,
     _package_json='/opt/seerr/src/' ~ seerr___release._app ~ '/package.json',
     _service='/etc/systemd/system/seerr.service',
     _base_url=seerr___repo_url,
@@ -75,10 +75,10 @@ seerr___nvm_repo_url: 'https://raw.githubusercontent.com/nvm-sh/nvm/'
 seerr___nvm: "{{ {} | r_pufky.data.v3(
 
     _version=seerr___release._nvm,
-    _env=seerr___app._var_dir ~ '/nvm.env',
-    _dir=seerr___app._var_dir ~ '/.nvm',
-    _sh=seerr___app._var_dir ~ '/.nvm/nvm.sh',
-    _cache=seerr___app._var_dir ~ '/.cache/node',
+    _env=seerr___app._var_d ~ '/nvm.env',
+    _dir=seerr___app._var_d ~ '/.nvm',
+    _sh=seerr___app._var_d ~ '/.nvm/nvm.sh',
+    _cache=seerr___app._var_d ~ '/.cache/node',
     _url=seerr___nvm_repo_url ~ seerr___release._nvm ~ '/install.sh',
   ) }}"
 
@@ -89,7 +89,7 @@ seerr___nvm: "{{ {} | r_pufky.data.v3(
 seerr___pnpm: "{{ {} | r_pufky.data.v3(
 
     _url='https://get.pnpm.io/install.sh',
-    _app=seerr___app._var_dir ~ '/.local/share/pnpm/pnpm',
+    _app=seerr___app._var_d ~ '/.local/share/pnpm/pnpm',
   ) }}"
 
 ###############################################################################

@@ -11,8 +11,8 @@
         name: 'r_pufky.arr.seerr'
       vars:
         seerr_flg_config: true
-        seerr_cfg_dir: '{{
-            lookup("env", "MOLECULE_PROJECT_DIRECTORY") ~ "/files/default"
+        seerr_cfg_d: '{{
+            lookup("env", "MOLECULE_PROJECT_DIRECTORY") ~ "/templates/default"
           }}'
 
     - name: 'Converge | role | r_pufky.arr.seerr (create db backup)'

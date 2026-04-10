@@ -19,14 +19,14 @@
         _user=seerr_srv_user,
         _group=seerr_srv_group,
       ) }}"
-    seerr__cfg: "{{ seerr___app | r_pufky.data.v3(
+    seerr__cfg: "{{ {} | r_pufky.data.v3(
 
         _version=seerr_srv_version,
         _package=seerr_srv_version ~ '.tar.gz',
-        _dir=seerr_cfg_dir | regex_replace('\\/$', ''),
-        _backup_dir=seerr_cfg_backup_dir | regex_replace('\\/$', ''),
+        _d=seerr_cfg_d | regex_replace('\\/$', ''),
+        _backup_d=seerr_cfg_backup_d | regex_replace('\\/$', ''),
         _backup_metadata=seerr_cfg_backup_metadata,
-        _app='/opt/seerr/src/' ~ seerr_srv_version,
+        _app_d='/opt/seerr/src/' ~ seerr_srv_version,
         _package_json='/opt/seerr/src/' ~ seerr_srv_version ~ '/package.json',
         _url=seerr___repo_url ~ seerr___release._app ~ '.tar.gz',
       ) }}"
@@ -36,42 +36,42 @@
   ansible.builtin.assert:
     quiet: true
     that:
-      - seerr__cfg._backup_dir | length > 0
+      - seerr__cfg._backup_d | length > 0
     fail_msg: |
 
       ✘ Backup location not set.
       Backups enabled but no backup location defined.
 
       seerr_flg_backup: {{ seerr_flg_backup }}
-      seerr_cfg_backup_dir: {{ seerr__cfg._backup_dir }}
+      seerr_cfg_backup_d: {{ seerr__cfg._backup_d }}
 
 - name: 'Prep | assert | restore enabled and location defined'
   when: seerr_flg_restore
   ansible.builtin.assert:
     quiet: true
     that:
-      - seerr__cfg._backup_dir | length > 0
+      - seerr__cfg._backup_d | length > 0
     fail_msg: |
 
       ✘ Backup location not set.
       Backups enabled but no backup location defined.
 
       seerr_flg_restore: {{ seerr_flg_restore }}
-      seerr_cfg_backup_dir: {{ seerr__cfg._backup_dir }}
+      seerr_cfg_backup_d: {{ seerr__cfg._backup_d }}
 
 - name: 'Prep | assert | config enabled and source defined'
   when: seerr_flg_config
   ansible.builtin.assert:
     quiet: true
     that:
-      - seerr__cfg._dir | length > 0
+      - seerr__cfg._d | length > 0
     fail_msg: |
 
       ✘ Config source not set.
       Config source enabled but no config source defined.
 
       seerr_flg_config: {{ seerr_flg_config }}
-      seerr_cfg_dir: {{ seerr__cfg._dir }}
+      seerr_cfg_d: {{ seerr__cfg._d }}
 
 - name: '{{ "Prep | account | query user " ~ seerr__srv._user }}'
   ansible.builtin.command: '{{ "id " ~ seerr__srv._user }}'

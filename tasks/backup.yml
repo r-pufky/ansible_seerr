@@ -23,11 +23,11 @@
 
 - name: 'Backup | filesystem | set backup location'
   when:
-    seerr__cfg._backup_dir | length > 0 and seerr__cfg._backup_dir != '/tmp'
+    seerr__cfg._backup_d | length > 0 and seerr__cfg._backup_d != '/tmp'
   delegate_to: 'localhost'
   run_once: true
   ansible.builtin.file:
-    path: '{{ seerr__cfg._backup_dir }}'
+    path: '{{ seerr__cfg._backup_d }}'
     mode: '0750'
     state: directory
 
@@ -39,7 +39,7 @@
     }}'
   args:
     executable: '/bin/bash'
-    chdir: '{{ seerr__cfg._env | dirname }}'
+    chdir: '{{ seerr___app._env | dirname }}'
   changed_when: true
 
 - name:
@@ -47,7 +47,7 @@
   ansible.posix.synchronize:
     mode: pull
     src: '{{ seerr__archive }}'
-    dest: '{{ seerr__cfg._backup_dir ~ "/" }}'
+    dest: '{{ seerr__cfg._backup_d ~ "/" }}'
 
 - name: 'Backup | filesystem | cleanup'
   ansible.builtin.file:

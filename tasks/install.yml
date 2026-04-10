@@ -23,7 +23,7 @@
 
 - name: 'Install | filesystem | set system directories'
   ansible.builtin.file:
-    path: '{{ seerr___app._src_dir }}'
+    path: '{{ seerr___app._src_d }}'
     owner: 'root'
     group: 'root'
     mode: '0755'
@@ -56,7 +56,7 @@
 
 - name: 'Install | filesystem | find previous installations'
   ansible.builtin.find:
-    paths: '{{ seerr__cfg._src_dir }}'
+    paths: '{{ seerr___app._src_d }}'
     file_type: 'directory'
     recurse: false
     excludes:
@@ -72,7 +72,7 @@
     label: '{{ item.path }}'
 
 - name: 'Install | url | 🗘 Seerr (~1 minute) 🗘'
-  when: not (url_inject_enable | default(false))
+  when: not (molecule_flg_inject | default(false))
   ansible.builtin.get_url:
     url: '{{ seerr__cfg._url }}'
     dest: '{{ "/tmp/" ~ seerr__cfg._package }}'
@@ -85,9 +85,9 @@
   register: seerr__install
   until: seerr__install is succeeded
 
-- name: '{{ "Install | filesystem | set " ~ seerr__cfg._app }}'
+- name: '{{ "Install | filesystem | set " ~ seerr__cfg._app_d }}'
   ansible.builtin.file:
-    path: '{{ seerr__cfg._app }}'
+    path: '{{ seerr__cfg._app_d }}'
     owner: 'root'
     group: 'root'
     mode: '0755'
@@ -98,7 +98,7 @@
     creates: '{{ seerr__cfg._package_json }}'
     src: '{{ "/tmp/" ~ seerr__cfg._package }}'
     remote_src: true
-    dest: '{{ seerr__cfg._app }}'
+    dest: '{{ seerr__cfg._app_d }}'
     owner: 'root'
     group: 'root'
     mode: 'a-st'
@@ -239,7 +239,7 @@
     'set -o pipefail && curl -fsSL https://get.pnpm.io/install.sh | bash -'
   args:
     executable: '/bin/bash'
-    chdir: '{{ seerr__cfg._var_dir }}'
+    chdir: '{{ seerr___app._var_d }}'
     creates: '{{ seerr__pnpm._app }}'
   changed_when: false
   become: true
@@ -253,8 +253,8 @@
       pnpm install --frozen-lockfile
   args:
     executable: '/bin/bash'
-    chdir: '{{ seerr__cfg._app }}'
-    creates: '{{ seerr__cfg._app ~ "/node_modules" }}'
+    chdir: '{{ seerr__cfg._app_d }}'
+    creates: '{{ seerr__cfg._app_d ~ "/node_modules" }}'
   environment:
     CYPRESS_INSTALL_BINARY: '0'
     HUSKY: '0'
@@ -281,8 +281,8 @@
     pnpm store prune
   args:
     executable: '/bin/bash'
-    chdir: '{{ seerr__cfg._app }}'
-    creates: '{{ seerr__cfg._app ~ "/dist" }}'
+    chdir: '{{ seerr__cfg._app_d }}'
+    creates: '{{ seerr__cfg._app_d ~ "/dist" }}'
   environment:
     NODE_OPTIONS: '--max-old-space-size=-1'
     GENERATE_SOURCEMAP: 'false'
@@ -291,23 +291,23 @@
 
 - name: 'Install | filesystem | query environment'
   ansible.builtin.stat:
-    path: '{{ seerr__cfg._env }}'
+    path: '{{ seerr___app._env }}'
   register: seerr__env
 
 # Only overwrite .env if no config set and it is a new install.
-- name: '{{ "Install | filesystem | set minimal " ~ seerr__cfg._env }}'
-  when: seerr__cfg._dir | length == 0 and not seerr__env.stat.exists
+- name: '{{ "Install | filesystem | set minimal " ~ seerr___app._env }}'
+  when: seerr__cfg._d | length == 0 and not seerr__env.stat.exists
   ansible.builtin.template:
-    src: 'files/default/.env'
-    dest: '{{ seerr__cfg._env }}'
+    src: 'templates/default/.env'
+    dest: '{{ seerr___app._env }}'
     owner: '{{ seerr__srv._user }}'
     group: '{{ seerr__srv._group }}'
     mode: '0640'
 
-- name: '{{ "Install | filesystem | set " ~ seerr__cfg._service }}'
+- name: '{{ "Install | filesystem | set " ~ seerr___app._service }}'
   ansible.builtin.template:
     src: 'systemd/seerr.service.j2'
-    dest: '{{ seerr__cfg._service }}'
+    dest: '{{ seerr___app._service }}'
     owner: 'root'
     group: 'root'
     mode: '0644'

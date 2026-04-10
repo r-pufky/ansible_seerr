@@ -18,33 +18,50 @@
 # * https://docs.seerr.dev/getting-started/buildfromsource
 # * https://api-docs.seerr.dev/
 
-- name: 'Config | filetree | deploy managed files'
+- name: 'Config | filetree | set managed directories'
+  ansible.builtin.file:
+    path: '{{ seerr___app._env | dirname ~ "/" ~ item.path }}'
+    owner: '{{ seerr__srv._user }}'
+    group: '{{ seerr__srv._group }}'
+    mode: '0750'
+    state: 'directory'
+  loop: '{{ query("community.general.filetree", seerr__cfg._d) }}'
+  loop_control:
+    label: '{{ item.path }}'
+  when: item.state == 'directory'
+
+- name: 'Config | filetree | set managed files'
   ansible.builtin.template:
     src: '{{ item.src }}'
-    dest: '{{ seerr__cfg._env | dirname ~ "/" ~ item.path }}'
+    dest: '{{ seerr___app._env | dirname ~ "/" ~ item.path }}'
     owner: '{{ seerr__srv._user }}'
     group: '{{ seerr__srv._group }}'
     mode: '0640'
-  loop: '{{ query("community.general.filetree", seerr__cfg._dir) }}'
+  loop: '{{ query("community.general.filetree", seerr__cfg._d) }}'
   loop_control:
     label: '{{ item.path }}'
   when: item.state == 'file'
-  register: seerr__local
 
 - name: 'Config | filesystem | query remote files'
   ansible.builtin.find:
-    paths: '{{ seerr__cfg._env | dirname }}'
-    file_type: 'file'
+    paths: '{{ seerr___app._env | dirname }}'
+    file_type: 'any'
+    hidden: true
     recurse: true
     excludes: 'MediaCover'  # Ignore MediaCover to prevent metadata deletion.
   register: seerr__remote
 
-- name: 'Config | filesystem | remove unmanaged files'
+- name: 'Config | filetree | remove unmanaged files and directories'
   ansible.builtin.file:
     path: '{{ item.path }}'
     state: 'absent'
-  loop: '{{ seerr__remote.files }}'
+  loop: '{{ seerr__remote.files | sort(attribute="path", reverse=true) }}'
   loop_control:
     label: '{{ item.path }}'
   when: >
-    item.path not in seerr__local.results | map(attribute='dest') | list
+    item.path not in
+    (
+      query("community.general.filetree", seerr__cfg._d) |
+      map(attribute='path') |
+      map('regex_replace', '^', seerr___app._env | dirname ~ "/") | list
+    )

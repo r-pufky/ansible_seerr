@@ -5,7 +5,7 @@
 # Default configuration is deployed successfully.
 #
 # Tests:
-# * files/default/.env set.
+# * templates/default/.env set.
 # * seerr.service active and running.
 # * Standard role run with auto generation (during prep).
 # * Standard role run with injected .env.
@@ -27,8 +27,8 @@ provisioner:
   inventory:
     group_vars:
       all:
-        url_inject_enable: true
-        seerr_cfg_backup_dir: '/tmp/ansible_seerr_test'
+        molecule_flg_inject: true
+        seerr_cfg_backup_d: '/tmp/ansible_seerr_test'
         seerr_cfg_backup_metadata: false
 platforms:
   - name: 'seerr-default'

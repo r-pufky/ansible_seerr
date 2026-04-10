@@ -16,7 +16,8 @@
       vars:
         test_name: '{{ "Verify | test | " ~ seerr___app._env }}'
         test_src: '{{
-            lookup("env", "MOLECULE_PROJECT_DIRECTORY") ~ "/files/default/.env"
+            lookup("env", "MOLECULE_PROJECT_DIRECTORY") ~
+            "/templates/default/.env"
           }}'
         test_file: '{{ seerr___app._env }}'
         test_owner: 'seerr'

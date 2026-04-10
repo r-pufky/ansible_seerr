@@ -5,7 +5,7 @@ After=network-online.target
 
 [Service]
 ExecStart={{ seerr__cfg._node }} dist/index.js
-WorkingDirectory={{ seerr__cfg._app }}
+WorkingDirectory={{ seerr__cfg._app_d }}
 Environment="NODE_ENV=production"
 Environment="CONFIG_DIRECTORY={{ seerr___app._env | dirname }}"
 EnvironmentFile={{ seerr___app._env }}
