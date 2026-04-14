@@ -76,7 +76,7 @@ information. **However** this will deploy static files and overwrite existing
 DB's, etc. Existing installs likely want to use **backup** and **restore**.
 
 ``` yaml
-# Include your environment in .env.
+# Include your environment in .env, and settings.json.
 - name: 'Statically deploy Seerr with pre-existing DB and config.'
   ansible.builtin.include_role:
     name: 'r_pufky.arr.seerr'
@@ -87,7 +87,9 @@ DB's, etc. Existing installs likely want to use **backup** and **restore**.
 
 #### Dynamic Deployments
 Use **backup** and **restore** to carry over existing data to a new instance;
-or leave seerr_flg_config disabled to leave existing config untouched.
+or leave seerr_flg_config disabled to leave existing config untouched. Postgres
+installs typically do not need this if settings.json and .env are deployed with
+config.
 
 ``` yaml
 - name: 'Upgrade Seerr version without touching configuration.'

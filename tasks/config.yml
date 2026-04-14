@@ -18,50 +18,68 @@
 # * https://docs.seerr.dev/getting-started/buildfromsource
 # * https://api-docs.seerr.dev/
 
-- name: 'Config | filetree | set managed directories'
-  ansible.builtin.file:
-    path: '{{ seerr___app._env | dirname ~ "/" ~ item.path }}'
-    owner: '{{ seerr__srv._user }}'
-    group: '{{ seerr__srv._group }}'
-    mode: '0750'
-    state: 'directory'
-  loop: '{{ query("community.general.filetree", seerr__cfg._d) }}'
-  loop_control:
-    label: '{{ item.path }}'
-  when: item.state == 'directory'
+- name: '{{ "Config | filesystem | set " ~ seerr___app._env | dirname }}'
+  when: seerr__cfg._d | length > 0
+  block:
+    - name: 'Config | filetree | set managed directories'
+      ansible.builtin.file:
+        path: '{{ seerr___app._env | dirname ~ "/" ~ item.path }}'
+        owner: '{{ seerr__srv._user }}'
+        group: '{{ seerr__srv._group }}'
+        mode: '0750'
+        state: 'directory'
+      loop: '{{ query("community.general.filetree", seerr__cfg._d) }}'
+      loop_control:
+        label: '{{ item.path }}'
+      when: item.state == 'directory'
 
-- name: 'Config | filetree | set managed files'
-  ansible.builtin.template:
-    src: '{{ item.src }}'
-    dest: '{{ seerr___app._env | dirname ~ "/" ~ item.path }}'
-    owner: '{{ seerr__srv._user }}'
-    group: '{{ seerr__srv._group }}'
-    mode: '0640'
-  loop: '{{ query("community.general.filetree", seerr__cfg._d) }}'
-  loop_control:
-    label: '{{ item.path }}'
-  when: item.state == 'file'
+    - name: 'Config | filetree | set managed files'
+      ansible.builtin.template:
+        src: '{{ item.src }}'
+        dest: '{{ seerr___app._env | dirname ~ "/" ~ item.path }}'
+        owner: '{{ seerr__srv._user }}'
+        group: '{{ seerr__srv._group }}'
+        mode: '0640'
+      loop: '{{ query("community.general.filetree", seerr__cfg._d) }}'
+      loop_control:
+        label: '{{ item.path }}'
+      when: item.state == 'file'
 
-- name: 'Config | filesystem | query remote files'
+    - name: 'Config | filesystem | query remote files'
+      ansible.builtin.find:
+        paths: '{{ seerr___app._env | dirname }}'
+        file_type: 'any'
+        hidden: true
+        recurse: true
+        excludes: 'MediaCover'  # Ignore MediaCover to prevent metadata deletion.
+      register: seerr__remote
+
+    - name: 'Config | filetree | remove unmanaged files and directories'
+      ansible.builtin.file:
+        path: '{{ item.path }}'
+        state: 'absent'
+      loop: '{{ seerr__remote.files | sort(attribute="path", reverse=true) }}'
+      loop_control:
+        label: '{{ item.path }}'
+      when: >
+        item.path not in
+        (
+          query("community.general.filetree", seerr__cfg._d) |
+          map(attribute='path') |
+          map('regex_replace', '^', seerr___app._env | dirname ~ "/") | list
+        )
+
+- name: '{{ "Config | filesystem | query " ~ seerr___app._env | dirname }}'
+  when: seerr__cfg._d | length == 0
   ansible.builtin.find:
-    paths: '{{ seerr___app._env | dirname }}'
-    file_type: 'any'
+    paths: "{{ seerr___app._env | dirname }}"
+    recurse: false  # Don't need to enumerate sub-directories to remove.
     hidden: true
-    recurse: true
-    excludes: 'MediaCover'  # Ignore MediaCover to prevent metadata deletion.
-  register: seerr__remote
+  register: seerr__cmd
 
-- name: 'Config | filetree | remove unmanaged files and directories'
+- name: '{{ "Config | filesystem | clear " ~ seerr___app._env | dirname }}'
+  when: seerr__cfg._d | length == 0
   ansible.builtin.file:
-    path: '{{ item.path }}'
-    state: 'absent'
-  loop: '{{ seerr__remote.files | sort(attribute="path", reverse=true) }}'
-  loop_control:
-    label: '{{ item.path }}'
-  when: >
-    item.path not in
-    (
-      query("community.general.filetree", seerr__cfg._d) |
-      map(attribute='path') |
-      map('regex_replace', '^', seerr___app._env | dirname ~ "/") | list
-    )
+    path: "{{ item.path }}"
+    state: absent
+  loop: "{{ seerr__cmd.files }}"
