@@ -156,6 +156,12 @@
             regex_replace('^\\^', '')
           ).split('.')[0]
         ),
+        _pnpm=(
+          (
+            (seerr__package_json.content | b64decode | from_json).engines.pnpm |
+            regex_replace('^\\^', '')
+          )
+        ),
       ) }}"
     seerr__pnpm: "{{ seerr___pnpm | r_pufky.data.v3(
 
@@ -241,6 +247,8 @@
     executable: '/bin/bash'
     chdir: '{{ seerr___app._var_d }}'
     creates: '{{ seerr__pnpm._app }}'
+  environment:
+    PNPM_VERSION: '{{ seerr__cfg._pnpm }}'
   changed_when: false
   become: true
   become_user: '{{ seerr__srv._user }}'
@@ -249,7 +257,7 @@
   ansible.builtin.shell: >
       source {{ seerr___nvm._env }} &&
       corepack enable &&
-      corepack use pnpm@latest &&
+      corepack use pnpm@{{ seerr__cfg._pnpm }} &&
       pnpm install --frozen-lockfile
   args:
     executable: '/bin/bash'

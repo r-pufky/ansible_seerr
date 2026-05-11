@@ -51,7 +51,7 @@
         file_type: 'any'
         hidden: true
         recurse: true
-        excludes: 'MediaCover'  # Ignore MediaCover to prevent metadata deletion.
+        excludes: 'MediaCover'  # Ignore MediaCover; prevent metadata deletion.
       register: seerr__remote
 
     - name: 'Config | filetree | remove unmanaged files and directories'

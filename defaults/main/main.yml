@@ -60,11 +60,11 @@ seerr_flg_config: false
 #       PATCH: Safe - Usually requires no role updates.
 #   RECOMMEND: Only increment MINOR.PATCH.
 #
-# Default: 'v3.1.1'.
+# Default: 'v3.2.0'.
 #
 # Reference:
 # * https://github.com/seerr-team/seerr/releases/latest
-seerr_srv_version: 'v3.1.1'
+seerr_srv_version: 'v3.2.0'
 
 # Github access token (seerr).
 #
